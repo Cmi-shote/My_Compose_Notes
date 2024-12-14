@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">My Compose Notes</string>
+    <string name="all_notes_organized">All your notes.\nOrganised.\nEffortless.</string>
+    <string name="all_notes_organized_desc">Inspiration strikes anywhere. Notey lets you capture, organise your ideas.</string>
+    <string name="sign_up">Sign up &#8212; it\'s free</string>
+    <string name="notey">Notey</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
 </resources>
