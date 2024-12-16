@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mycomposenotes.R
-import com.example.mycomposenotes.notes.model.Notes
+import com.example.mycomposenotes.notes.data.Notes
 import com.example.mycomposenotes.ui.theme.MyComposeNotesTheme
 
 @Composable

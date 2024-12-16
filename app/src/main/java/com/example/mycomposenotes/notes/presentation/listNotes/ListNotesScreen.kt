@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.mycomposenotes.R
-import com.example.mycomposenotes.notes.model.Notes
+import com.example.mycomposenotes.notes.data.Notes
 import com.example.mycomposenotes.notes.presentation.welcome.WelcomeScreenTopBar
 import com.example.mycomposenotes.ui.theme.MyComposeNotesTheme
 
