@@ -8,6 +8,6 @@ import androidx.room.RoomDatabase
     version = 1,
     exportSchema = false
 )
-abstract class PersonDatabase: RoomDatabase() {
+abstract class NotesDatabase: RoomDatabase() {
     abstract fun NotesDao(): NotesDao
 }
