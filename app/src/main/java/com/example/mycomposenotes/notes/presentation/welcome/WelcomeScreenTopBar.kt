@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mycomposenotes.R
-import com.example.mycomposenotes.notes.data.Notes
+import com.example.mycomposenotes.notes.domain.model.Notes
 
 @Composable
 fun WelcomeScreenTopBar(

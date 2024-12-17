@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mycomposenotes.R
-import com.example.mycomposenotes.notes.data.Notes
+import com.example.mycomposenotes.notes.domain.model.Notes
 import com.example.mycomposenotes.ui.theme.MyComposeNotesTheme
 
 @Composable
@@ -74,7 +74,7 @@ fun NoteCard(
                     )
 
                     Text(
-                        text = note.date,
+                        text = note.timeStamp.toString(), //todo, create function to turn Long to desired String
                         fontSize = 10.sp
                     )
 
@@ -97,13 +97,13 @@ fun NoteCard(
 fun NoteCardPreview() {
     MyComposeNotesTheme {
         val noteSample = Notes(
-            id = "110en2323",
+            id = 1344324,
             title = "A Right Media Mix Can Make The Difference",
             content = stringResource(R.string.lorem_ipsum),
-            date = "13/24",
+            timeStamp = System.currentTimeMillis(),
             category = "Work",
             mediaId = "1",
-            backGroundImageId = R.drawable.rainbow_1
+            backGroundImageId = R.drawable.note_background_1
         )
         NoteCard(
             note = noteSample

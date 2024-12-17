@@ -13,29 +13,41 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.example.mycomposenotes.R
-import com.example.mycomposenotes.notes.data.Notes
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.mycomposenotes.notes.domain.model.Notes
 import com.example.mycomposenotes.notes.presentation.welcome.WelcomeScreenTopBar
-import com.example.mycomposenotes.ui.theme.MyComposeNotesTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ListNotesScreen(modifier: Modifier = Modifier, notes: List<Notes>) {
+fun ListNotesScreen(
+    modifier: Modifier = Modifier,
+    onclick: () -> Unit = {},
+    onCardSelected: (Notes) -> Unit = {},
+    viewModel: ListNotesViewModel = koinViewModel<ListNotesViewModel>()
+) {
+
+    val notesList by viewModel.notesList.collectAsStateWithLifecycle()
+    var query by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
-            WelcomeScreenTopBar(onClick = {}, notes = notes)
+            WelcomeScreenTopBar(onClick = {}, notes = notesList)
         },
         modifier = modifier
             .fillMaxSize()
             .statusBarsPadding(),
         floatingActionButton = {
-            FloatingActionButton(onClick = {}, containerColor = Color.Black, contentColor = Color.White) {
+            FloatingActionButton(onClick = {
+                onclick()
+            }, containerColor = Color.Black, contentColor = Color.White) {
                 Icon(Icons.Filled.Add, contentDescription = "Add")
             }
         },
@@ -51,9 +63,10 @@ fun ListNotesScreen(modifier: Modifier = Modifier, notes: List<Notes>) {
                 ),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                items(notes) { note ->
+                items(notesList) { note ->
                     NoteCard(
                         note = note,
+                        onClick = { onCardSelected(note) },
                         modifier = Modifier.padding(horizontal = 4.dp)
                     )
                 }
@@ -62,25 +75,25 @@ fun ListNotesScreen(modifier: Modifier = Modifier, notes: List<Notes>) {
     )
 }
 
-@Preview(
-    showBackground = true,
-    showSystemUi = true
-)
-@Composable
-fun ListNotesScreenPreview() {
-    MyComposeNotesTheme {
-        ListNotesScreen(
-            notes = (1..100).map {
-                (Notes(
-                    id = "110en2323",
-                    title = "A Right Media Mix Can Make The Difference",
-                    content = stringResource(R.string.lorem_ipsum),
-                    date = "13/24",
-                    category = "Work",
-                    mediaId = "1",
-                    backGroundImageId = R.drawable.rainbow_1
-                )).copy(id = it.toString())
-            }
-        )
-    }
-}
+//@Preview(
+//    showBackground = true,
+//    showSystemUi = true
+//)
+//@Composable
+//fun ListNotesScreenPreview() {
+//    MyComposeNotesTheme {
+//        ListNotesScreen(
+//            notes = (1..100).map {
+//                (Notes(
+//                    id = 123421,
+//                    title = "A Right Media Mix Can Make The Difference",
+//                    content = stringResource(R.string.lorem_ipsum),
+//                    timeStamp = System.currentTimeMillis(),
+//                    category = "Work",
+//                    mediaId = "1",
+//                    backGroundImageId = R.drawable.note_background_1
+//                )).copy(id = it)
+//            }
+//        )
+//    }
+//}
