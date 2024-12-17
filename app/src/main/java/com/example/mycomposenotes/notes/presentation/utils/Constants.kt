@@ -1,4 +1,4 @@
-package com.example.mycomposenotes.utils
+package com.example.mycomposenotes.notes.presentation.utils
 
 object Constants {
     const val NOTE_DATABASE_NAME = "notes_db"

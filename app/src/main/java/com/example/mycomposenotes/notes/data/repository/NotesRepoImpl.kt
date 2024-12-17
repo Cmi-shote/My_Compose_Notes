@@ -1,5 +1,8 @@
-package com.example.mycomposenotes.notes.data
+package com.example.mycomposenotes.notes.data.repository
 
+import com.example.mycomposenotes.notes.data.dataSource.NotesDao
+import com.example.mycomposenotes.notes.domain.model.Notes
+import com.example.mycomposenotes.notes.domain.repository.NotesRepo
 import kotlinx.coroutines.flow.Flow
 
 class NotesRepoImpl(
@@ -9,7 +12,7 @@ class NotesRepoImpl(
         return notesDao.getNotes()
     }
 
-    override suspend fun getNoteById(id: String): Notes? {
+    override suspend fun getNoteById(id: Int): Notes? {
         return notesDao.getNoteById(id)
     }
 

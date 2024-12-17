@@ -1,7 +1,9 @@
-package com.example.mycomposenotes.notes.data
+package com.example.mycomposenotes.notes.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.example.mycomposenotes.notes.domain.model.Notes
+import com.example.mycomposenotes.notes.data.dataSource.NotesDao
 
 @Database(
     entities = [Notes::class],
