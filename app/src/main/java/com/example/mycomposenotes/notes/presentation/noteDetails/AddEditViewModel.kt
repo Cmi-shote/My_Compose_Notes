@@ -1,5 +1,6 @@
 package com.example.mycomposenotes.notes.presentation.noteDetails
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -14,8 +15,8 @@ class AddEditViewModel(
     private val notesUseCases: NotesUseCases
 ) : ViewModel() {
 
-    private var _currentNoteId = mutableIntStateOf(0)
-    val currentNoteId: State<Int> = _currentNoteId
+    private val _currentNoteId = mutableStateOf<Int?>(null)
+    val currentNoteId: State<Int?> = _currentNoteId
 
     private val _noteTitle = mutableStateOf("")
     val noteTitle: State<String> = _noteTitle
@@ -28,7 +29,7 @@ class AddEditViewModel(
     )
     val noteBackground: State<Int> = _noteBackground
 
-
+    private val _snackBarHostState = SnackbarHostState()
 
     fun onEvent(event: AddEditNoteEvent) {
         when (event) {
@@ -39,22 +40,24 @@ class AddEditViewModel(
                 _noteContent.value = event.content
             }
             is AddEditNoteEvent.CurrentNoteId -> {
-                _currentNoteId.intValue = event.id
+                _currentNoteId.value = event.id
             }
             is AddEditNoteEvent.SaveNote -> {
                 viewModelScope.launch {
                     try {
-                        notesUseCases.addNotesUseCase(
-                            Notes(
-                                id = currentNoteId.value,
-                                title = noteTitle.value,
-                                content = noteContent.value,
-                                category = "",
-                                backGroundImageId = noteBackground.value,
-                                timeStamp = System.currentTimeMillis(),
-                                mediaId = ""
-                            )
+                        val newNote = Notes(
+                            id = currentNoteId.value,
+                            title = noteTitle.value,
+                            content = noteContent.value,
+                            category = "",
+                            backGroundImageId = noteBackground.value,
+                            timeStamp = System.currentTimeMillis(),
+                            mediaId = ""
                         )
+                        notesUseCases.addNotesUseCase(
+                            newNote
+                        )
+                        event.onSuccess()
                     } catch (e: InvalidNoteException) {
                         AddEditNoteEvent.ShowSnackBar(
                             message = e.message ?: "Couldn't save note"
@@ -63,9 +66,19 @@ class AddEditViewModel(
                 }
             }
 
-            AddEditNoteEvent.DeleteNote -> TODO()
-            AddEditNoteEvent.NavigateBack -> TODO()
-            is AddEditNoteEvent.ShowSnackBar -> TODO()
+            is AddEditNoteEvent.DeleteNote -> {
+                viewModelScope.launch {
+                    notesUseCases.deleteNotesUseCase(event.note)
+                    event.onDelete()
+                }
+            }
+            is AddEditNoteEvent.ShowSnackBar -> {
+                viewModelScope.launch {
+                    _snackBarHostState.showSnackbar(
+                        message = event.message
+                    )
+                }
+            }
         }
     }
 }

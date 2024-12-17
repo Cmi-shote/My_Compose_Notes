@@ -23,7 +23,8 @@ fun AddEditNotesScreen(
                 top = statusBarPadding.calculateTopPadding(),
                 bottom = statusBarPadding.calculateBottomPadding()
             ),
-        note = note
+        note = note,
+        onBackPressed = onBackPressed,
     )
 
 }

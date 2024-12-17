@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.mycomposenotes.R
 import com.example.mycomposenotes.notes.domain.model.Notes
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -41,8 +42,8 @@ fun NoteContent(
     onBackPressed: () -> Unit = {},
     onCameraClicked: () -> Unit = {}, //todo control with viewmodel
     onClipClicked: () -> Unit = {}, //todo control with viewmodel
-    onDeleteClicked: () -> Unit = {} //todo control with viewmodel
 ) {
+
 
     LaunchedEffect(note) {
         if (note.id != null) {
@@ -79,9 +80,11 @@ fun NoteContent(
             NoteDetailsTopBar(
                 onBackPressed = onBackPressed,
                 onCameraClicked = onCameraClicked,
-                onDeleteClicked = onDeleteClicked,
+                onDeleteClicked = { viewModel.onEvent(AddEditNoteEvent.DeleteNote(note, onDelete = { onBackPressed() })) },
                 onClipClicked = onClipClicked,
-                onDoneBtnClick = { viewModel.onEvent(AddEditNoteEvent.SaveNote) }
+                onDoneBtnClick = {
+                    viewModel.onEvent(AddEditNoteEvent.SaveNote(onSuccess = { onBackPressed() }))
+                }
             )
         }
 
