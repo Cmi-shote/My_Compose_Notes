@@ -1,7 +1,7 @@
 package com.example.mycomposenotes.di
 
-import com.example.mycomposenotes.notes.data.NotesRepo
-import com.example.mycomposenotes.notes.data.NotesRepoImpl
+import com.example.mycomposenotes.notes.domain.repository.NotesRepo
+import com.example.mycomposenotes.notes.data.repository.NotesRepoImpl
 import org.koin.dsl.module
 
 val repositoryModule = module {
