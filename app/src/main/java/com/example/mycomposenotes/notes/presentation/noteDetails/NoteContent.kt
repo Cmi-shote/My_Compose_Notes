@@ -1,7 +1,7 @@
 package com.example.mycomposenotes.notes.presentation.noteDetails
 
+import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,10 +17,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,34 +26,39 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mycomposenotes.R
-import com.example.mycomposenotes.notes.data.Notes
-import com.example.mycomposenotes.ui.theme.MyComposeNotesTheme
+import com.example.mycomposenotes.notes.domain.model.Notes
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun NoteContent(
+    note: Notes,
     modifier: Modifier = Modifier,
-    note: Notes?,
-    onTitleChange: (String) -> Unit = {},
-    onContentChange: (String) -> Unit = {},
+    viewModel: AddEditViewModel = koinViewModel<AddEditViewModel>(),
     onBackPressed: () -> Unit = {},
-    onCameraClicked: () -> Unit = {},
-    onClipClicked: () -> Unit = {},
-    onDeleteClicked: () -> Unit = {}
+    onCameraClicked: () -> Unit = {}, //todo control with viewmodel
+    onClipClicked: () -> Unit = {}, //todo control with viewmodel
+    onDeleteClicked: () -> Unit = {} //todo control with viewmodel
 ) {
 
-    var title by remember { mutableStateOf(note?.title ?: "") }
-    var content by remember { mutableStateOf(note?.content ?: "") }
+    LaunchedEffect(note) {
+        if (note.id != null) {
+            viewModel.onEvent(AddEditNoteEvent.CurrentNoteId(note.id))
+            viewModel.onEvent(AddEditNoteEvent.EnteredTitle(note.title))
+            viewModel.onEvent(AddEditNoteEvent.EnteredContent(note.content))
+        }
+    }
+
+    val noteBackground = if (note.backGroundImageId == 0) viewModel.noteBackground.value else note.backGroundImageId
+    val title by viewModel.noteTitle
+    val content by viewModel.noteContent
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.White)
     ) {
 
         Box(
@@ -63,7 +66,7 @@ fun NoteContent(
                 .fillMaxWidth()
                 .height(150.dp)
         ) {
-            note?.backGroundImageId?.let {
+            noteBackground.let {
                 Image(
                     painter = painterResource(id = it),
                     contentDescription = "Background Image",
@@ -77,7 +80,8 @@ fun NoteContent(
                 onBackPressed = onBackPressed,
                 onCameraClicked = onCameraClicked,
                 onDeleteClicked = onDeleteClicked,
-                onClipClicked = onClipClicked
+                onClipClicked = onClipClicked,
+                onDoneBtnClick = { viewModel.onEvent(AddEditNoteEvent.SaveNote) }
             )
         }
 
@@ -96,7 +100,7 @@ fun NoteContent(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "21/02",
+                    text = "21/02", // This can be dynamic based on your data model
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.Gray
                 )
@@ -104,84 +108,61 @@ fun NoteContent(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            if (note == null) {
-                TextField(
-                    value = title,
-                    onValueChange = {
-                        title = it
-                        onTitleChange(it)
-                    },
-                    label = { Text("Title") },
-                    textStyle = MaterialTheme.typography.headlineSmall.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = colorResource(R.color.off_white),
-                        focusedContainerColor = colorResource(R.color.off_white),
-                        focusedIndicatorColor = Color.Gray,
-                        unfocusedIndicatorColor = Color.LightGray
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            } else {
-                Text(
-                    text = note.title,
-                    style = MaterialTheme.typography.headlineSmall.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    color = Color.Black
-                )
-            }
+            TextField(
+                value = title,
+                onValueChange = { viewModel.onEvent(AddEditNoteEvent.EnteredTitle(it)) },
+                label = { Text("Title") },
+                textStyle = MaterialTheme.typography.headlineSmall.copy(
+                    fontWeight = FontWeight.Bold
+                ),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = colorResource(R.color.white),
+                    focusedContainerColor = colorResource(R.color.white),
+                    focusedIndicatorColor = Color.Gray,
+                    unfocusedIndicatorColor = Color.LightGray
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            if (note == null) {
-                TextField(
-                    value = content,
-                    onValueChange = {
-                        content = it
-                        onContentChange(it)
-                    },
-                    label = { Text("Content") },
-                    textStyle = MaterialTheme.typography.bodyMedium,
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = colorResource(R.color.off_white),
-                        focusedContainerColor = colorResource(R.color.off_white),
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                )
-            } else {
-                Text(
-                    text = note.content,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.DarkGray
-                )
-            }
+            TextField(
+                value = content,
+                onValueChange = { viewModel.onEvent(AddEditNoteEvent.EnteredContent(it)) },
+                label = { Text("Content") },
+                textStyle = MaterialTheme.typography.bodyMedium,
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = colorResource(R.color.white),
+                    focusedContainerColor = colorResource(R.color.white),
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
         }
     }
 }
 
 
-@Preview(
-    showBackground = true,
-    showSystemUi = true
-)
-@Composable
-fun NoteDetailsScreenContentPreview() {
-    MyComposeNotesTheme {
-        val noteSample = Notes(
-            id = "110en2323",
-            title = "A Right Media Mix Can Make The Difference",
-            content = stringResource(R.string.lorem_ipsum),
-            date = "13/24",
-            category = "Work",
-            mediaId = "1",
-            backGroundImageId = R.drawable.rainbow_6
-        )
-        NoteContent(note = null)
-    }
-}
+
+//@Preview(
+//    showBackground = true,
+//    showSystemUi = true
+//)
+//@Composable
+//fun NoteDetailsScreenContentPreview() {
+//    MyComposeNotesTheme {
+//        val noteSample = Notes(
+//            id = 12334324,
+//            title = "A Right Media Mix Can Make The Difference",
+//            content = stringResource(R.string.lorem_ipsum),
+//            timeStamp = System.currentTimeMillis(),
+//            category = "Work",
+//            mediaId = "1",
+//            backGroundImageId = R.drawable.note_background_6
+//        )
+//        NoteContent(note = null)
+//    }
+//}
