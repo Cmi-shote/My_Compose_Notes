@@ -4,15 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.example.mycomposenotes.notes.presentation.navigation.ListNotesRoute
 import com.example.mycomposenotes.notes.presentation.navigation.NotesNavHost
+import com.example.mycomposenotes.notes.presentation.navigation.WelcomeRoute
 import com.example.mycomposenotes.ui.theme.MyComposeNotesTheme
+import com.google.firebase.auth.FirebaseAuth
+import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
+
+    private val firebaseAuth: FirebaseAuth by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -20,24 +23,18 @@ class MainActivity : ComponentActivity() {
             MyComposeNotesTheme {
                 val navController = rememberNavController()
 
-                NotesNavHost(navController)
+                // Determine start destination based on authentication state
+                val startDestination = if (firebaseAuth.currentUser != null) {
+                    ListNotesRoute // Navigate to notes list if authenticated
+                } else {
+                    WelcomeRoute// Otherwise, navigate to welcome screen
+                }
+
+                NotesNavHost(
+                    navController = navController,
+                    startDestination = startDestination,
+                )
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MyComposeNotesTheme {
-        Greeting("Android")
     }
 }

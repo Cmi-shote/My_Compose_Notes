@@ -11,12 +11,14 @@ fun MainAppBar(
     onTextChange: (String) -> Unit,
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit,
-    onSearchTriggered: () -> Unit
+    onSearchTriggered: () -> Unit,
+    onSignOut: () -> Unit = {}
 ) {
     when (searchWidgetState) {
         SearchWidgetState.CLOSED -> {
             WelcomeScreenTopBar(
                 onClick = onSearchTriggered,
+                onSignOut = onSignOut,
                 notes = notes
             )
         }

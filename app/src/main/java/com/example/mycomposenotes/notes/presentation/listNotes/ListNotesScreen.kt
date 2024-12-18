@@ -15,9 +15,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.LayoutDirection
@@ -26,13 +23,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mycomposenotes.notes.domain.model.Notes
 import com.example.mycomposenotes.notes.presentation.welcome.MainAppBar
 import com.example.mycomposenotes.notes.presentation.welcome.SearchWidgetState
-import com.example.mycomposenotes.notes.presentation.welcome.WelcomeScreenTopBar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ListNotesScreen(
     modifier: Modifier = Modifier,
     onclick: () -> Unit = {},
+    onSignOut: () -> Unit = {},
     onCardSelected: (Notes) -> Unit = {},
     viewModel: ListNotesViewModel = koinViewModel<ListNotesViewModel>()
 ) {
@@ -59,6 +56,10 @@ fun ListNotesScreen(
                 },
                 onSearchClicked = {
                     Log.d("ListNotesScreen", "onSearchClicked: $it")
+                },
+                onSignOut = {
+                    viewModel.onEvent(ListNotesEvent.SignOut)
+                    onSignOut()
                 }
             )
         },

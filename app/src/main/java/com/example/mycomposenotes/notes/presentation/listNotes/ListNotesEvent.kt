@@ -7,4 +7,5 @@ sealed class ListNotesEvent {
     data class DeleteNote(val note: Notes) : ListNotesEvent()
     data class SearchNotes(val query: String) : ListNotesEvent()
     data class SearchWidget(val widget: SearchWidgetState) : ListNotesEvent()
+    object SignOut : ListNotesEvent()
 }

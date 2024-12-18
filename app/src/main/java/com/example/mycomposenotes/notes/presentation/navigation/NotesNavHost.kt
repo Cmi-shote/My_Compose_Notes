@@ -7,14 +7,58 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.mycomposenotes.notes.domain.model.Notes
 import com.example.mycomposenotes.notes.presentation.listNotes.ListNotesScreen
+import com.example.mycomposenotes.notes.presentation.login.LoginScreen
 import com.example.mycomposenotes.notes.presentation.noteDetails.AddEditNotesScreen
+import com.example.mycomposenotes.notes.presentation.signup.SignupScreen
 import com.example.mycomposenotes.notes.presentation.utils.CustomNavType
+import com.example.mycomposenotes.notes.presentation.welcome.WelcomeScreen
 import kotlinx.serialization.Serializable
 import kotlin.reflect.typeOf
 
 @Composable
-fun NotesNavHost(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = ListNotesRoute) {
+fun NotesNavHost(navController: NavHostController, startDestination: Any) {
+    NavHost(navController = navController, startDestination = startDestination) {
+        composable<WelcomeRoute> {
+            WelcomeScreen(
+                onClick = {
+                    navController.navigate(
+                        SignupRoute
+                    )
+                }
+            )
+        }
+
+        composable<LoginRoute> {
+            LoginScreen(
+                onClick = {
+                    navController.navigate(
+                        SignupRoute
+                    )
+                },
+                onSuccess = {
+                    navController.navigate(
+                        ListNotesRoute
+                    )
+                }
+            )
+        }
+
+        // Welcome Screen
+        composable<SignupRoute> {
+            SignupScreen(
+                onClick = {
+                    navController.navigate(
+                        LoginRoute
+                    )
+                },
+                onSuccess = {
+                    navController.navigate(
+                        ListNotesRoute
+                    )
+                }
+            )
+        }
+
         // List Notes Screen
         composable<ListNotesRoute> {
             ListNotesScreen(
@@ -27,6 +71,9 @@ fun NotesNavHost(navController: NavHostController) {
                     navController.navigate(
                         AddEditRoute(Notes())
                     )
+                },
+                onSignOut = {
+
                 }
             )
         }
@@ -56,3 +103,12 @@ data object ListNotesRoute
 data class AddEditRoute(
     val note: Notes
 )
+
+@Serializable
+data object WelcomeRoute
+
+@Serializable
+data object LoginRoute
+
+@Serializable
+data object SignupRoute

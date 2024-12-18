@@ -42,7 +42,6 @@ fun SearchAppBar(
         modifier = Modifier.fillMaxWidth()
             .padding(horizontal = 16.dp)
             .padding(bottom = 16.dp)
-//            .background(Color.White)
     ) {
         TextField(modifier = Modifier
             .fillMaxWidth(),
