@@ -1,5 +1,6 @@
 package com.example.mycomposenotes.notes.presentation.listNotes
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,6 +24,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mycomposenotes.notes.domain.model.Notes
+import com.example.mycomposenotes.notes.presentation.welcome.MainAppBar
+import com.example.mycomposenotes.notes.presentation.welcome.SearchWidgetState
 import com.example.mycomposenotes.notes.presentation.welcome.WelcomeScreenTopBar
 import org.koin.androidx.compose.koinViewModel
 
@@ -35,11 +38,29 @@ fun ListNotesScreen(
 ) {
 
     val notesList by viewModel.notesList.collectAsStateWithLifecycle()
-    var query by remember { mutableStateOf("") }
+    val searchWidgetState by viewModel.searchWidgetState
+    val searchTextState by viewModel.searchQuery.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
-            WelcomeScreenTopBar(onClick = {}, notes = notesList)
+            MainAppBar(
+                notes = notesList,
+                searchWidgetState = searchWidgetState,
+                searchTextState = searchTextState,
+                onTextChange = {
+                    viewModel.onEvent(ListNotesEvent.SearchNotes(it))
+                },
+                onSearchTriggered = {
+                    viewModel.onEvent(ListNotesEvent.SearchWidget(SearchWidgetState.OPENED))
+                },
+                onCloseClicked =  {
+                    viewModel.onEvent(ListNotesEvent.SearchNotes(""))
+                    viewModel.onEvent(ListNotesEvent.SearchWidget(SearchWidgetState.CLOSED))
+                },
+                onSearchClicked = {
+                    Log.d("ListNotesScreen", "onSearchClicked: $it")
+                }
+            )
         },
         modifier = modifier
             .fillMaxSize()

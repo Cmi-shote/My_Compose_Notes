@@ -1,9 +1,13 @@
 package com.example.mycomposenotes.notes.presentation.listNotes
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mycomposenotes.notes.domain.model.Notes
 import com.example.mycomposenotes.notes.domain.useCase.NotesUseCases
+import com.example.mycomposenotes.notes.presentation.welcome.SearchWidgetState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -19,18 +23,13 @@ class ListNotesViewModel(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
+    private val _searchWidgetState: MutableState<SearchWidgetState> =
+        mutableStateOf(value = SearchWidgetState.CLOSED)
+    val searchWidgetState: State<SearchWidgetState> = _searchWidgetState
+
     init {
         getNotes()
     }
-    /**
-     * Updates the current search query, triggering a refresh of the notes list.
-     *
-     * @param query The new search query.
-     */
-    fun updateSearchQuery(query: String) {
-        _searchQuery.value = query
-    }
-
 
     fun onEvent(event: ListNotesEvent) {
         when (event) {
@@ -45,6 +44,9 @@ class ListNotesViewModel(
                 _searchQuery.value = event.query
                 getNotes(event.query)
             }
+            is ListNotesEvent.SearchWidget -> {
+                _searchWidgetState.value = event.widget
+            }
         }
     }
 
@@ -53,7 +55,7 @@ class ListNotesViewModel(
      *
      * @param query The search query to filter notes.
      */
-    fun getNotes(query: String = "") {
+    private fun getNotes(query: String = "") {
         viewModelScope.launch {
             useCases.getNotesUseCase(query).collectLatest { notes ->
                 _notesList.value = notes
