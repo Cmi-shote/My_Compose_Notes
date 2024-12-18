@@ -1,6 +1,5 @@
 package com.example.mycomposenotes.notes.presentation.noteDetails
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,12 +12,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,94 +60,108 @@ fun NoteContent(
     val noteBackground = if (note.backGroundImageId == 0) viewModel.noteBackground.value else note.backGroundImageId
     val title by viewModel.noteTitle
     val content by viewModel.noteContent
+    val snackBarMessage by viewModel.snackBarMessage
+    val scope = rememberCoroutineScope()
+    val snackBarHostState = remember { SnackbarHostState() }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-        ) {
-            noteBackground.let {
-                Image(
-                    painter = painterResource(id = it),
-                    contentDescription = "Background Image",
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.matchParentSize(),
-                    alpha = 0.2f
-                )
-            }
-
-            NoteDetailsTopBar(
-                onBackPressed = onBackPressed,
-                onCameraClicked = onCameraClicked,
-                onDeleteClicked = { viewModel.onEvent(AddEditNoteEvent.DeleteNote(note, onDelete = { onBackPressed() })) },
-                onClipClicked = onClipClicked,
-                onDoneBtnClick = {
-                    viewModel.onEvent(AddEditNoteEvent.SaveNote(onSuccess = { onBackPressed() }))
-                }
-            )
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState)
         }
-
+    ) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
-                .padding(16.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.schedule_icon),
-                    contentDescription = "Clock Icon",
-                    tint = Color.Gray
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "21/02", // This can be dynamic based on your data model
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
-                )
-            }
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            TextField(
-                value = title,
-                onValueChange = { viewModel.onEvent(AddEditNoteEvent.EnteredTitle(it)) },
-                label = { Text("Title") },
-                textStyle = MaterialTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = colorResource(R.color.white),
-                    focusedContainerColor = colorResource(R.color.white),
-                    focusedIndicatorColor = Color.Gray,
-                    unfocusedIndicatorColor = Color.LightGray
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            TextField(
-                value = content,
-                onValueChange = { viewModel.onEvent(AddEditNoteEvent.EnteredContent(it)) },
-                label = { Text("Content") },
-                textStyle = MaterialTheme.typography.bodyMedium,
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = colorResource(R.color.white),
-                    focusedContainerColor = colorResource(R.color.white),
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
-            )
+                    .height(150.dp)
+            ) {
+                noteBackground.let {
+                    Image(
+                        painter = painterResource(id = it),
+                        contentDescription = "Background Image",
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier.matchParentSize(),
+                        alpha = 0.2f
+                    )
+                }
+
+                NoteDetailsTopBar(
+                    onBackPressed = onBackPressed,
+                    onCameraClicked = onCameraClicked,
+                    onDeleteClicked = { viewModel.onEvent(AddEditNoteEvent.DeleteNote(note, onDelete = { onBackPressed() })) },
+                    onClipClicked = onClipClicked,
+                    onDoneBtnClick = {
+                        viewModel.onEvent(AddEditNoteEvent.SaveNote(onSuccess = { onBackPressed() }))
+                        scope.launch {
+                            snackBarHostState.showSnackbar(
+                                message = snackBarMessage
+                            )
+                        }
+                    }
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.schedule_icon),
+                        contentDescription = "Clock Icon",
+                        tint = Color.Gray
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "21/02", // This can be dynamic based on your data model
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                TextField(
+                    value = title,
+                    onValueChange = { viewModel.onEvent(AddEditNoteEvent.EnteredTitle(it)) },
+                    label = { Text("Title") },
+                    textStyle = MaterialTheme.typography.headlineSmall.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = colorResource(R.color.white),
+                        focusedContainerColor = colorResource(R.color.white),
+                        focusedIndicatorColor = Color.Gray,
+                        unfocusedIndicatorColor = Color.LightGray
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                TextField(
+                    value = content,
+                    onValueChange = { viewModel.onEvent(AddEditNoteEvent.EnteredContent(it)) },
+                    label = { Text("Content") },
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = colorResource(R.color.white),
+                        focusedContainerColor = colorResource(R.color.white),
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
+            }
         }
     }
 }

@@ -31,17 +31,23 @@ class AddEditViewModel(
 
     private val _snackBarHostState = SnackbarHostState()
 
+    private val _snackBarMessage = mutableStateOf("")
+    val snackBarMessage: State<String> = _snackBarMessage
+
     fun onEvent(event: AddEditNoteEvent) {
         when (event) {
             is AddEditNoteEvent.EnteredTitle -> {
                 _noteTitle.value = event.title
             }
+
             is AddEditNoteEvent.EnteredContent -> {
                 _noteContent.value = event.content
             }
+
             is AddEditNoteEvent.CurrentNoteId -> {
                 _currentNoteId.value = event.id
             }
+
             is AddEditNoteEvent.SaveNote -> {
                 viewModelScope.launch {
                     try {
@@ -59,9 +65,7 @@ class AddEditViewModel(
                         )
                         event.onSuccess()
                     } catch (e: InvalidNoteException) {
-                        AddEditNoteEvent.ShowSnackBar(
-                            message = e.message ?: "Couldn't save note"
-                        )
+                        _snackBarMessage.value = e.message ?: "Couldn't save note"
                     }
                 }
             }
@@ -70,13 +74,6 @@ class AddEditViewModel(
                 viewModelScope.launch {
                     notesUseCases.deleteNotesUseCase(event.note)
                     event.onDelete()
-                }
-            }
-            is AddEditNoteEvent.ShowSnackBar -> {
-                viewModelScope.launch {
-                    _snackBarHostState.showSnackbar(
-                        message = event.message
-                    )
                 }
             }
         }
