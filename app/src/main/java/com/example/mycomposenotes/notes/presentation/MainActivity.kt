@@ -5,9 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
-import com.example.mycomposenotes.notes.presentation.navigation.ListNotesRoute
 import com.example.mycomposenotes.notes.presentation.navigation.NotesNavHost
-import com.example.mycomposenotes.notes.presentation.navigation.WelcomeRoute
+import com.example.mycomposenotes.notes.presentation.navigation.Route
 import com.example.mycomposenotes.ui.theme.MyComposeNotesTheme
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.android.ext.android.inject
@@ -25,9 +24,9 @@ class MainActivity : ComponentActivity() {
 
                 // Determine start destination based on authentication state
                 val startDestination = if (firebaseAuth.currentUser != null) {
-                    ListNotesRoute // Navigate to notes list if authenticated
+                    Route.ListNotesRoute // Navigate to notes list if authenticated
                 } else {
-                    WelcomeRoute// Otherwise, navigate to welcome screen
+                    Route.WelcomeRoute// Otherwise, navigate to welcome screen
                 }
 
                 NotesNavHost(

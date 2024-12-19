@@ -1,8 +1,8 @@
 package com.example.mycomposenotes.notes.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.mycomposenotes.notes.domain.model.Notes
@@ -12,79 +12,83 @@ import com.example.mycomposenotes.notes.presentation.noteDetails.AddEditNotesScr
 import com.example.mycomposenotes.notes.presentation.signup.SignupScreen
 import com.example.mycomposenotes.notes.presentation.utils.CustomNavType
 import com.example.mycomposenotes.notes.presentation.welcome.WelcomeScreen
-import kotlinx.serialization.Serializable
 import kotlin.reflect.typeOf
 
 @Composable
-fun NotesNavHost(navController: NavHostController, startDestination: Any) {
+fun NotesNavHost(navController: NavHostController, startDestination: Route) {
     NavHost(navController = navController, startDestination = startDestination) {
-        composable<WelcomeRoute> {
+        // Welcome Screen
+        composable<Route.WelcomeRoute> {
             WelcomeScreen(
                 onClick = {
                     navController.navigate(
-                        SignupRoute
+                        Route.SignupRoute
                     )
                 }
             )
         }
 
-        composable<LoginRoute> {
+        // Login Screen
+        composable<Route.LoginRoute> {
             LoginScreen(
                 onClick = {
                     navController.navigate(
-                        SignupRoute
+                        Route.SignupRoute
                     )
                 },
                 onSuccess = {
                     navController.navigate(
-                        ListNotesRoute
+                        Route.ListNotesRoute
                     )
                 }
             )
         }
 
-        // Welcome Screen
-        composable<SignupRoute> {
+        // Signup Screen
+        composable<Route.SignupRoute> {
             SignupScreen(
                 onClick = {
                     navController.navigate(
-                        LoginRoute
+                        Route.LoginRoute
                     )
                 },
                 onSuccess = {
                     navController.navigate(
-                        ListNotesRoute
+                        Route.ListNotesRoute
                     )
                 }
             )
         }
 
         // List Notes Screen
-        composable<ListNotesRoute> {
+        composable<Route.ListNotesRoute> {
             ListNotesScreen(
                 onCardSelected = { note ->
                     navController.navigate(
-                        AddEditRoute(note)
+                        Route.AddEditRoute(note)
                     )
                 },
                 onclick = {
                     navController.navigate(
-                        AddEditRoute(Notes())
+                        Route.AddEditRoute(Notes())
                     )
                 },
                 onSignOut = {
-
+                    navController.navigate(Route.WelcomeRoute) {
+                        popUpTo(0) { inclusive = true }
+                        launchSingleTop = true
+                    }
                 }
             )
         }
 
         // Add/Edit Notes Screen
-        composable<AddEditRoute>(
+        composable<Route.AddEditRoute>(
             typeMap = mapOf(
                 typeOf<Notes>() to CustomNavType.NoteType
             )
         ) {
-            val arguments = it.toRoute<AddEditRoute>()
+            val arguments = it.toRoute<Route.AddEditRoute>()
             AddEditNotesScreen(
                 note = arguments.note,
                 onBackPressed = {
@@ -94,21 +98,3 @@ fun NotesNavHost(navController: NavHostController, startDestination: Any) {
         }
     }
 }
-
-
-@Serializable
-data object ListNotesRoute
-
-@Serializable
-data class AddEditRoute(
-    val note: Notes
-)
-
-@Serializable
-data object WelcomeRoute
-
-@Serializable
-data object LoginRoute
-
-@Serializable
-data object SignupRoute
