@@ -86,4 +86,6 @@ dependencies {
     //lifecycle view model compose
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
+    //coil
+    implementation(libs.coil)
 }

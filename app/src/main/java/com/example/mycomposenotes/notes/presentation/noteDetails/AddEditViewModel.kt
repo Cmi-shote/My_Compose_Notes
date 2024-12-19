@@ -1,5 +1,6 @@
 package com.example.mycomposenotes.notes.presentation.noteDetails
 
+import android.net.Uri
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
@@ -34,6 +35,9 @@ class AddEditViewModel(
     private val _snackBarMessage = mutableStateOf("")
     val snackBarMessage: State<String> = _snackBarMessage
 
+    private val _selectedImageUris = mutableStateOf<List<Uri>>(emptyList())
+    val selectedImageUris: State<List<Uri>> = _selectedImageUris
+
     fun onEvent(event: AddEditNoteEvent) {
         when (event) {
             is AddEditNoteEvent.EnteredTitle -> {
@@ -51,6 +55,8 @@ class AddEditViewModel(
             is AddEditNoteEvent.SaveNote -> {
                 viewModelScope.launch {
                     try {
+                        val mediaId = _selectedImageUris.value.joinToString(",") { it.toString() }
+
                         val newNote = Notes(
                             id = currentNoteId.value,
                             title = noteTitle.value,
@@ -58,7 +64,7 @@ class AddEditViewModel(
                             category = "",
                             backGroundImageId = noteBackground.value,
                             timeStamp = System.currentTimeMillis(),
-                            mediaId = ""
+                            mediaId = mediaId
                         )
                         notesUseCases.addNotesUseCase(
                             newNote
@@ -76,6 +82,17 @@ class AddEditViewModel(
                     event.onDelete()
                 }
             }
+            is AddEditNoteEvent.UpdateImageUris -> {
+                _selectedImageUris.value = event.imageUris
+            }
+        }
+    }
+
+    fun getUrisFromMediaId(mediaId: String): List<Uri> {
+        return if (mediaId.isBlank()) {
+            emptyList()
+        } else {
+            mediaId.split(",").map { Uri.parse(it) }
         }
     }
 }

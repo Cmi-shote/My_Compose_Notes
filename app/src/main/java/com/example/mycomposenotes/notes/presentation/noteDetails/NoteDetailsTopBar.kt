@@ -42,7 +42,6 @@ fun NoteDetailsTopBar(
     onBackPressed: () -> Unit = {},
     onDeleteClicked: () -> Unit = {},
     onClipClicked: () -> Unit = {},
-    onCameraClicked: () -> Unit = {}
 ) {
     var showMoreOptions by remember { mutableStateOf(false) }
 
@@ -112,19 +111,19 @@ fun NoteDetailsTopBar(
                     }
                 )
 
-                DropdownMenuItem(
-                    text = { Text("Camera") },
-                    onClick = {
-                        onCameraClicked()
-                        showMoreOptions = false
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.camera_icon),
-                            contentDescription = "Camera"
-                        )
-                    }
-                )
+//                DropdownMenuItem(
+//                    text = { Text("Camera") },
+//                    onClick = {
+//                        onCameraClicked()
+//                        showMoreOptions = false
+//                    },
+//                    leadingIcon = {
+//                        Icon(
+//                            imageVector = ImageVector.vectorResource(R.drawable.camera_icon),
+//                            contentDescription = "Camera"
+//                        )
+//                    }
+//                )
             }
         }
     }
@@ -161,7 +160,6 @@ fun TransparentTopBarPreview() {
                 onBackPressed = {},
                 onDeleteClicked = {},
                 onClipClicked = {},
-                onCameraClicked = {}
             )
     }
 }

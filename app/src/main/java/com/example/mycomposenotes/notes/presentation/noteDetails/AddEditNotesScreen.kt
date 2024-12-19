@@ -14,7 +14,7 @@ fun AddEditNotesScreen(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {}
 ) {
-
+//todo: change snack bar to toast
     val statusBarPadding = WindowInsets.statusBars.asPaddingValues()
 
     NoteContent(

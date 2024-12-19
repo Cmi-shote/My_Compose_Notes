@@ -41,6 +41,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "composeLifecycle" }
 lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "composeLifecycle" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+coil = { module = "io.coil-kt:coil-compose", version = "2.3.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
