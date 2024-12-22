@@ -49,7 +49,7 @@ fun NoteContent(
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
-    ) {
+    ) { paddingValues ->
         Column(modifier = modifier.fillMaxSize()) {
             NoteContentTopBar(
                 noteBackground = noteBackground ?: 0,
