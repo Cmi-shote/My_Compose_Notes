@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.example.mycomposenotes.notes.domain.model.Notes
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -32,6 +33,7 @@ fun NoteContent(
     val snackBarMessage by viewModel.snackBarMessage
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
 
     val multiplePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 2),
@@ -63,6 +65,9 @@ fun NoteContent(
                     )
                 },
                 onDoneBtnClick = {
+                    val savedImagePaths = viewModel.saveImagesToStorage(selectedImageUris, context)
+                    val newMediaId = savedImagePaths.joinToString(",")
+                    viewModel.onEvent(AddEditNoteEvent.UpdateMediaId(newMediaId))
                     viewModel.onEvent(AddEditNoteEvent.SaveNote(onSuccess = { onBackPressed() }))
                     scope.launch {
                         snackBarHostState.showSnackbar(message = snackBarMessage)

@@ -1,5 +1,6 @@
 package com.example.mycomposenotes.notes.presentation.noteDetails
 
+import android.content.Context
 import android.net.Uri
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.State
@@ -11,6 +12,7 @@ import com.example.mycomposenotes.notes.domain.model.InvalidNoteException
 import com.example.mycomposenotes.notes.domain.model.Notes
 import com.example.mycomposenotes.notes.domain.useCase.NotesUseCases
 import kotlinx.coroutines.launch
+import java.io.File
 
 class AddEditViewModel(
     private val notesUseCases: NotesUseCases
@@ -30,13 +32,14 @@ class AddEditViewModel(
     )
     val noteBackground: State<Int> = _noteBackground
 
-    private val _snackBarHostState = SnackbarHostState()
-
     private val _snackBarMessage = mutableStateOf("")
     val snackBarMessage: State<String> = _snackBarMessage
 
     private val _selectedImageUris = mutableStateOf<List<Uri>>(emptyList())
     val selectedImageUris: State<List<Uri>> = _selectedImageUris
+
+    private val _mediaId = mutableStateOf("")
+    val mediaId: State<String> = _mediaId
 
     fun onEvent(event: AddEditNoteEvent) {
         when (event) {
@@ -55,7 +58,6 @@ class AddEditViewModel(
             is AddEditNoteEvent.SaveNote -> {
                 viewModelScope.launch {
                     try {
-                        val mediaId = _selectedImageUris.value.joinToString(",") { it.toString() }
 
                         val newNote = Notes(
                             id = currentNoteId.value,
@@ -64,7 +66,7 @@ class AddEditViewModel(
                             category = "",
                             backGroundImageId = noteBackground.value,
                             timeStamp = System.currentTimeMillis(),
-                            mediaId = mediaId
+                            mediaId = mediaId.value
                         )
                         notesUseCases.addNotesUseCase(newNote)
                         notesUseCases.uploadNoteToFirebaseUseCase(newNote)
@@ -85,14 +87,10 @@ class AddEditViewModel(
             is AddEditNoteEvent.UpdateImageUris -> {
                 _selectedImageUris.value = event.imageUris
             }
+            is AddEditNoteEvent.UpdateMediaId -> {
+                _mediaId.value = event.mediaId
+            }
         }
-    }
-
-    fun uploadNotes(notes: Notes) {
-        viewModelScope.launch {
-            notesUseCases.uploadNoteToFirebaseUseCase(notes)
-        }
-
     }
 
     fun getUrisFromMediaId(mediaId: String): List<Uri> {
@@ -102,4 +100,20 @@ class AddEditViewModel(
             mediaId.split(",").map { Uri.parse(it) }
         }
     }
+
+    fun saveImagesToStorage(uris: List<Uri>, context: Context): List<String> {
+        val savedPaths = mutableListOf<String>()
+        uris.forEach { uri ->
+            val fileName = "IMG_${System.currentTimeMillis()}.jpg"
+            val file = File(context.filesDir, fileName)
+            context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                file.outputStream().use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+            }
+            savedPaths.add(file.absolutePath)
+        }
+        return savedPaths
+    }
+
 }

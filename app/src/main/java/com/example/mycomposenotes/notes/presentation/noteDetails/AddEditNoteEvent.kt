@@ -10,4 +10,5 @@ sealed class AddEditNoteEvent {
     data class SaveNote(val onSuccess: () -> Unit) : AddEditNoteEvent()
     data class DeleteNote(val note: Notes, val onDelete: () -> Unit) : AddEditNoteEvent()
     data class UpdateImageUris(val imageUris: List<Uri>) : AddEditNoteEvent()
+    data class UpdateMediaId(val mediaId: String) : AddEditNoteEvent()
 }
