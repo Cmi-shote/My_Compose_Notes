@@ -1,5 +1,6 @@
 package com.example.mycomposenotes.notes.presentation.listNotes
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +37,7 @@ fun NoteCard(
     note: Notes,
     onClick: () -> Unit = {}
 ) {
+    Log.d("NoteCard", "NoteCard called with note: ${Notes.noteBackgroundImages[note.backGroundImageId]}")
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -49,7 +51,7 @@ fun NoteCard(
     ) {
         Box(modifier = Modifier.padding(16.dp)) {
             Image(
-                painter = painterResource(note.backGroundImageId),
+                painter = painterResource(Notes.noteBackgroundImages[note.backGroundImageId]!!),
                 contentDescription = "random",
                 modifier = Modifier.matchParentSize(),
                 contentScale = ContentScale.FillBounds,

@@ -14,4 +14,10 @@ interface NotesRepo {
     suspend fun deleteData(notes: Notes)
 
     suspend fun updateData(notes: Notes)
+
+    suspend fun fetchNotesFromFirebase(): List<Notes>
+
+    suspend fun uploadNoteToFirebase(notes: Notes)
+
+    suspend fun getNoteByTimeStamp(timeStamp: Long): Notes
 }

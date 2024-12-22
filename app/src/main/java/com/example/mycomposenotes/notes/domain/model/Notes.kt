@@ -14,18 +14,18 @@ data class Notes(
     val title: String = "",
     val content: String = "",
     val category: String = "",
-    val backGroundImageId: Int = 0,
+    val backGroundImageId: Int = -1,
     val timeStamp: Long = 0L,
     val mediaId: String = ""
 ) {
     companion object {
-        val noteBackgroundImages = listOf(
-            R.drawable.note_background_1,
-            R.drawable.note_background_2,
-            R.drawable.note_background_3,
-            R.drawable.note_background_4,
-            R.drawable.note_background_5,
-            R.drawable.note_background_6,
+        val noteBackgroundImages = mapOf(
+            0 to R.drawable.note_background_1,
+            1 to R.drawable.note_background_2,
+            2 to R.drawable.note_background_3,
+            3 to R.drawable.note_background_4,
+            4 to R.drawable.note_background_5,
+            5 to R.drawable.note_background_6
         )
     }
 }

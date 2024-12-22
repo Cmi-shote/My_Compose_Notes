@@ -34,8 +34,12 @@ class ListNotesViewModel(
     private val _authenticationState = mutableStateOf<AuthenticationState>(AuthenticationState.Unauthenticated)
     val authenticationState: State<AuthenticationState> = _authenticationState
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     init {
-        getNotes()
+        syncNotes()
+//        getNotes()
     }
 
     fun onEvent(event: ListNotesEvent) {
@@ -76,6 +80,21 @@ class ListNotesViewModel(
     private fun signOut() {
         signOutUseCase.execute{
             _authenticationState.value = it
+        }
+    }
+
+    private fun syncNotes() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                useCases.getNotesFromFirebaseUseCase()
+                getNotes()
+                Log.d("ListNotesViewModel", "Notes synced from Firebase ${notesList.value}")
+            } catch (e: Exception) {
+                Log.e("ListNotesViewModel", "Error syncing notes from Firebase", e)
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 }

@@ -26,7 +26,7 @@ fun NoteContent(
     onBackPressed: () -> Unit = {},
 ) {
     val selectedImageUris by viewModel.selectedImageUris
-    val noteBackground = if (note.backGroundImageId == 0) viewModel.noteBackground.value else note.backGroundImageId
+    val noteBackground = if (note.backGroundImageId == -1) Notes.noteBackgroundImages[viewModel.noteBackground.value] else Notes.noteBackgroundImages[note.backGroundImageId]
     val title by viewModel.noteTitle
     val content by viewModel.noteContent
     val snackBarMessage by viewModel.snackBarMessage
@@ -52,7 +52,7 @@ fun NoteContent(
     ) {
         Column(modifier = modifier.fillMaxSize()) {
             NoteContentTopBar(
-                noteBackground = noteBackground,
+                noteBackground = noteBackground ?: 0,
                 onBackPressed = onBackPressed,
                 onDeleteClicked = {
                     viewModel.onEvent(AddEditNoteEvent.DeleteNote(note, onDelete = { onBackPressed() }))

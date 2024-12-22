@@ -26,4 +26,7 @@ interface NotesDao {
 
     @Update
     suspend fun updateData(notes: Notes)
+
+    @Query("SELECT * FROM notes_table WHERE timeStamp like :timeStamp")
+    suspend fun getNoteByTimeStamp(timeStamp: Long): Notes
 }

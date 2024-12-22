@@ -26,7 +26,7 @@ class AddEditViewModel(
     val noteContent: State<String> = _noteContent
 
     private val _noteBackground = mutableIntStateOf(
-        Notes.noteBackgroundImages.random()
+        Notes.noteBackgroundImages.keys.random()
     )
     val noteBackground: State<Int> = _noteBackground
 
@@ -66,9 +66,9 @@ class AddEditViewModel(
                             timeStamp = System.currentTimeMillis(),
                             mediaId = mediaId
                         )
-                        notesUseCases.addNotesUseCase(
-                            newNote
-                        )
+                        notesUseCases.addNotesUseCase(newNote)
+                        notesUseCases.uploadNoteToFirebaseUseCase(newNote)
+
                         event.onSuccess()
                     } catch (e: InvalidNoteException) {
                         _snackBarMessage.value = e.message ?: "Couldn't save note"
@@ -86,6 +86,13 @@ class AddEditViewModel(
                 _selectedImageUris.value = event.imageUris
             }
         }
+    }
+
+    fun uploadNotes(notes: Notes) {
+        viewModelScope.launch {
+            notesUseCases.uploadNoteToFirebaseUseCase(notes)
+        }
+
     }
 
     fun getUrisFromMediaId(mediaId: String): List<Uri> {
