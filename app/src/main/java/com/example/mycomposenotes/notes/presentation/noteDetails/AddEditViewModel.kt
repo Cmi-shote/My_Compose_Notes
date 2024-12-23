@@ -83,6 +83,7 @@ class AddEditViewModel(
             is AddEditNoteEvent.DeleteNote -> {
                 viewModelScope.launch {
                     notesUseCases.deleteNotesUseCase(event.note)
+                    event.note.id?.let { notesUseCases.deleteNoteFromFirebase(it) }
                     event.onDelete()
                 }
             }

@@ -84,4 +84,18 @@ class NotesRepoImpl(
     override suspend fun getNoteByTimeStamp(timeStamp: Long): Notes {
         return notesDao.getNoteByTimeStamp(timeStamp)
     }
+
+    override suspend fun deleteNoteFromFirebase(noteId: Int) {
+        try {
+            firebaseFirestore.collection("notes")
+                .document(noteId.toString()) // Use the note ID as the document ID
+                .delete()
+                .await()
+
+            Log.d("NotesRepoImpl", "Note deleted successfully from Firebase")
+        } catch (e: Exception) {
+            Log.e("NotesRepoImpl", "Error deleting note from Firebase", e)
+        }
+    }
+
 }

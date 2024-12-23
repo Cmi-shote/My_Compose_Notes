@@ -2,6 +2,7 @@ package com.example.mycomposenotes.di
 
 import com.example.mycomposenotes.notes.domain.useCase.AddNotesUseCase
 import com.example.mycomposenotes.notes.domain.useCase.AuthenticationUseCase
+import com.example.mycomposenotes.notes.domain.useCase.DeleteNoteFromFirebase
 import com.example.mycomposenotes.notes.domain.useCase.DeleteNotesUseCase
 import com.example.mycomposenotes.notes.domain.useCase.GetNoteUseCase
 import com.example.mycomposenotes.notes.domain.useCase.GetNotesFromFirebaseUseCase
@@ -19,11 +20,12 @@ val useCaseModule = module {
     factory { DeleteNotesUseCase(get()) }
     factory { GetNotesUseCase(get()) }
     factory { GetNoteUseCase(get()) }
-    factory { NotesUseCases(get(), get(), get(), get(), get(), get()) }
+    factory { NotesUseCases(get(), get(), get(), get(), get(), get(), get()) }
     factory { LoginUseCase(get()) }
     factory { SignOutUseCase(get()) }
     factory { SignupUseCase(get()) }
     factory { AuthenticationUseCase(get(), get(), get()) }
     factory { GetNotesFromFirebaseUseCase(get()) }
     factory { UploadNoteToFirebaseUseCase(get()) }
+    factory { DeleteNoteFromFirebase(get()) }
 }

@@ -6,5 +6,6 @@ data class NotesUseCases(
     val getNoteUseCase: GetNoteUseCase,
     val addNotesUseCase: AddNotesUseCase,
     val getNotesFromFirebaseUseCase: GetNotesFromFirebaseUseCase,
-    val uploadNoteToFirebaseUseCase: UploadNoteToFirebaseUseCase
+    val uploadNoteToFirebaseUseCase: UploadNoteToFirebaseUseCase,
+    val deleteNoteFromFirebase: DeleteNoteFromFirebase
 )

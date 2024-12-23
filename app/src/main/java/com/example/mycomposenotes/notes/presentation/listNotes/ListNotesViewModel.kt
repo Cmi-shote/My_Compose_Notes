@@ -47,6 +47,7 @@ class ListNotesViewModel(
             is ListNotesEvent.DeleteNote -> {
                 viewModelScope.launch {
                     useCases.deleteNotesUseCase(event.note)
+                    event.note.id?.let { useCases.deleteNoteFromFirebase(it) }
                     // Refresh notes after deletion
                     getNotes(_searchQuery.value)
                 }

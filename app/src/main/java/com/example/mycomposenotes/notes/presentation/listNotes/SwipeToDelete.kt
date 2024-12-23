@@ -1,5 +1,6 @@
 package com.example.mycomposenotes.notes.presentation.listNotes
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
@@ -37,6 +38,7 @@ fun <T> SwipeToDeleteContainer(
     var isRemoved by remember { mutableStateOf(false) }
     val state = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
+            Log.d("SwipeToDeleteContainer", "ConfirmValueChange: $value")
             if (value == SwipeToDismissBoxValue.EndToStart) {
                 isRemoved = true
                 true
@@ -46,7 +48,7 @@ fun <T> SwipeToDeleteContainer(
         }
     )
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(isRemoved) {
         if (isRemoved) {
             delay(animationDuration.toLong())
             onDelete(item)
