@@ -103,11 +103,17 @@ fun ListNotesScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     items(notesList) { note ->
-                        NoteCard(
-                            note = note,
-                            onClick = { onCardSelected(note) },
-                            modifier = Modifier.padding(horizontal = 4.dp)
-                        )
+                        SwipeToDeleteContainer(
+                            item = note,
+                            onDelete = { viewModel.onEvent(ListNotesEvent.DeleteNote(it)) }
+                        ) {
+                            NoteCard(
+                                note = note,
+                                onClick = { onCardSelected(note) },
+                                modifier = Modifier.padding(horizontal = 4.dp)
+                            )
+                        }
+
                     }
                 }
             }
