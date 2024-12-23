@@ -8,6 +8,6 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel { ListNotesViewModel(get(), get()) }
-    viewModel { AddEditViewModel(get()) }
+    viewModel { AddEditViewModel(get(), get()) }
     viewModel { AuthViewModel(get()) }
 }

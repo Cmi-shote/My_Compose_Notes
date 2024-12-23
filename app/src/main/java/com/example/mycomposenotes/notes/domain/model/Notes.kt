@@ -16,7 +16,8 @@ data class Notes(
     val category: String = "",
     val backGroundImageId: Int = -1,
     val timeStamp: Long = 0L,
-    val mediaId: String = ""
+    val mediaId: String = "",
+    val userId: String = ""
 ) {
     companion object {
         val noteBackgroundImages = mapOf(

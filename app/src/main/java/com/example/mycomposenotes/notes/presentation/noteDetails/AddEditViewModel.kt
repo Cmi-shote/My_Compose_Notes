@@ -2,7 +2,6 @@ package com.example.mycomposenotes.notes.presentation.noteDetails
 
 import android.content.Context
 import android.net.Uri
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -11,11 +10,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.mycomposenotes.notes.domain.model.InvalidNoteException
 import com.example.mycomposenotes.notes.domain.model.Notes
 import com.example.mycomposenotes.notes.domain.useCase.NotesUseCases
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.io.File
 
 class AddEditViewModel(
-    private val notesUseCases: NotesUseCases
+    private val notesUseCases: NotesUseCases,
+    private val firebaseAuth: FirebaseAuth
 ) : ViewModel() {
 
     private val _currentNoteId = mutableStateOf<Int?>(null)
@@ -66,7 +67,8 @@ class AddEditViewModel(
                             category = "",
                             backGroundImageId = noteBackground.value,
                             timeStamp = System.currentTimeMillis(),
-                            mediaId = mediaId.value
+                            mediaId = mediaId.value,
+                            userId = firebaseAuth.currentUser?.uid ?: ""
                         )
                         notesUseCases.addNotesUseCase(newNote)
                         notesUseCases.uploadNoteToFirebaseUseCase(newNote)

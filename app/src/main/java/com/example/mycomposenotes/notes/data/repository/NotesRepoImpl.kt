@@ -4,13 +4,15 @@ import android.util.Log
 import com.example.mycomposenotes.notes.data.dataSource.NotesDao
 import com.example.mycomposenotes.notes.domain.model.Notes
 import com.example.mycomposenotes.notes.domain.repository.NotesRepo
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 
 class NotesRepoImpl(
     private val notesDao: NotesDao,
-    private val firebaseFirestore: FirebaseFirestore
+    private val firebaseFirestore: FirebaseFirestore,
+    private val firebaseAuth: FirebaseAuth
 ) : NotesRepo {
     override fun getNotes(): Flow<List<Notes>> {
         return notesDao.getNotes()
@@ -34,7 +36,10 @@ class NotesRepoImpl(
 
     override suspend fun fetchNotesFromFirebase(): List<Notes> {
         return try {
-            val documents = firebaseFirestore.collection("notes").get().await()
+            val currentUserId = firebaseAuth.currentUser?.uid
+            val documents = firebaseFirestore.collection("notes")
+                .whereEqualTo("userId", currentUserId) //filter notes by userId
+                .get().await()
             documents.map { doc ->
                 Notes(
                     id = doc.getLong("id")?.toInt(),
@@ -61,7 +66,8 @@ class NotesRepoImpl(
                 "category" to notes.category,
                 "backGroundImageId" to notes.backGroundImageId,
                 "timeStamp" to notes.timeStamp,
-                "mediaId" to notes.mediaId
+                "mediaId" to notes.mediaId,
+                "userId" to notes.userId
             )
 
             firebaseFirestore.collection("notes")
