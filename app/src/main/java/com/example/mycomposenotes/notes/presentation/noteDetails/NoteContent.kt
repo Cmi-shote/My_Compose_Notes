@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.mycomposenotes.notes.domain.model.Notes
+import com.example.mycomposenotes.notes.presentation.utils.toFormattedDate
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -81,7 +82,7 @@ fun NoteContent(
                 content = content,
                 onContentChange = { viewModel.onEvent(AddEditNoteEvent.EnteredContent(it)) },
                 selectedImageUris = selectedImageUris,
-                dateTime = note.timeStamp.toString()
+                dateTime = note.timeStamp.toFormattedDate()
             )
         }
     }

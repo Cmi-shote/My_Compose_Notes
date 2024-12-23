@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mycomposenotes.R
 import com.example.mycomposenotes.notes.domain.model.Notes
+import com.example.mycomposenotes.notes.presentation.utils.toFormattedDate
 import com.example.mycomposenotes.ui.theme.MyComposeNotesTheme
 
 @Composable
@@ -76,7 +77,7 @@ fun NoteCard(
                     )
 
                     Text(
-                        text = note.timeStamp.toString(), //todo, create function to turn Long to desired String
+                        text = note.timeStamp.toFormattedDate(),
                         fontSize = 10.sp
                     )
 
