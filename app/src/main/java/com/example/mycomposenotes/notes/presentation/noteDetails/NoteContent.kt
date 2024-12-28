@@ -1,5 +1,6 @@
 package com.example.mycomposenotes.notes.presentation.noteDetails
 
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.example.mycomposenotes.notes.domain.model.Notes
 import com.example.mycomposenotes.notes.presentation.utils.toFormattedDate
 import kotlinx.coroutines.launch
@@ -22,31 +22,39 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun NoteContent(
-    note: Notes,
+    noteId: Int?,
     modifier: Modifier = Modifier,
     viewModel: AddEditViewModel = koinViewModel(),
     onBackPressed: () -> Unit = {},
 ) {
+
+    viewModel.getNote(noteId)
+
     val selectedImageUris by viewModel.selectedImageUris
+    val note by viewModel.currentNote
     val noteBackground = if (note.backGroundImageId == -1) Notes.noteBackgroundImages[viewModel.noteBackground.value] else Notes.noteBackgroundImages[note.backGroundImageId]
     val title by viewModel.noteTitle
     val content by viewModel.noteContent
     val snackBarMessage by viewModel.snackBarMessage
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
 
     val multiplePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 2),
-        onResult = { viewModel.onEvent(AddEditNoteEvent.UpdateImageUris(it)) }
+        onResult = { uris ->
+            viewModel.onEvent(AddEditNoteEvent.UpdateImageUris(uris))
+        }
     )
 
     LaunchedEffect(note) {
         if (note.id != null) {
-            viewModel.onEvent(AddEditNoteEvent.CurrentNoteId(note.id))
+            viewModel.onEvent(AddEditNoteEvent.CurrentNoteId(note.id!!))
             viewModel.onEvent(AddEditNoteEvent.EnteredTitle(note.title))
             viewModel.onEvent(AddEditNoteEvent.EnteredContent(note.content))
-            viewModel.onEvent(AddEditNoteEvent.UpdateImageUris(viewModel.getUrisFromMediaId(note.mediaId)))
+            if (note.mediaId.isNotBlank()) {
+                val uris = note.mediaId.split(",").map { Uri.parse(it) }
+                viewModel.onEvent(AddEditNoteEvent.UpdateImageUris(uris))
+            }
         }
     }
 
@@ -66,12 +74,22 @@ fun NoteContent(
                     )
                 },
                 onDoneBtnClick = {
-                    val savedImagePaths = viewModel.saveImagesToStorage(selectedImageUris, context)
-                    val newMediaId = savedImagePaths.joinToString(",")
-                    viewModel.onEvent(AddEditNoteEvent.UpdateMediaId(newMediaId))
-                    viewModel.onEvent(AddEditNoteEvent.SaveNote(onSuccess = { onBackPressed() }))
                     scope.launch {
-                        snackBarHostState.showSnackbar(message = snackBarMessage)
+                        try {
+                            if (selectedImageUris.isNotEmpty()) {
+                                viewModel.onEvent(AddEditNoteEvent.UploadMedia(selectedImageUris) {
+                                    val mediaId = viewModel.mediaId.value
+                                    viewModel.onEvent(AddEditNoteEvent.UpdateMediaId(mediaId))
+
+                                    viewModel.onEvent(AddEditNoteEvent.SaveNote(onSuccess = { onBackPressed() }))
+                                })
+                            } else {
+                                // No images selected, just save the note
+                                viewModel.onEvent(AddEditNoteEvent.SaveNote(onSuccess = { onBackPressed() }))
+                            }
+                        } catch (e: Exception) {
+                            snackBarHostState.showSnackbar(message = "Error saving note: ${e.message}")
+                        }
                     }
                 }
             )
@@ -87,7 +105,6 @@ fun NoteContent(
         }
     }
 }
-
 
 
 //@Preview(

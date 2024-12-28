@@ -1,5 +1,6 @@
 package com.example.mycomposenotes.notes.presentation.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -10,9 +11,7 @@ import com.example.mycomposenotes.notes.presentation.listNotes.ListNotesScreen
 import com.example.mycomposenotes.notes.presentation.login.LoginScreen
 import com.example.mycomposenotes.notes.presentation.noteDetails.AddEditNotesScreen
 import com.example.mycomposenotes.notes.presentation.signup.SignupScreen
-import com.example.mycomposenotes.notes.presentation.utils.CustomNavType
 import com.example.mycomposenotes.notes.presentation.welcome.WelcomeScreen
-import kotlin.reflect.typeOf
 
 @Composable
 fun NotesNavHost(navController: NavHostController, startDestination: Route) {
@@ -65,12 +64,12 @@ fun NotesNavHost(navController: NavHostController, startDestination: Route) {
             ListNotesScreen(
                 onCardSelected = { note ->
                     navController.navigate(
-                        Route.AddEditRoute(note)
+                        Route.AddEditRoute(note.id)
                     )
                 },
                 onclick = {
                     navController.navigate(
-                        Route.AddEditRoute(Notes())
+                        Route.AddEditRoute(Notes().id)
                     )
                 },
                 onSignOut = {
@@ -83,14 +82,15 @@ fun NotesNavHost(navController: NavHostController, startDestination: Route) {
         }
 
         // Add/Edit Notes Screen
-        composable<Route.AddEditRoute>(
-            typeMap = mapOf(
-                typeOf<Notes>() to CustomNavType.NoteType
-            )
-        ) {
+        composable<Route.AddEditRoute>
+//            typeMap = mapOf(
+//                typeOf<Notes>() to CustomNavType.NoteType
+//            )
+         {
             val arguments = it.toRoute<Route.AddEditRoute>()
+            Log.d("AddEditRoute", "Note: $arguments")
             AddEditNotesScreen(
-                note = arguments.note,
+                noteId = arguments.noteId,
                 onBackPressed = {
                     navController.popBackStack()
                 }

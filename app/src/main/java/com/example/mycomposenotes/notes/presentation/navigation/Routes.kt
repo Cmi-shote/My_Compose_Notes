@@ -1,6 +1,5 @@
 package com.example.mycomposenotes.notes.presentation.navigation
 
-import com.example.mycomposenotes.notes.domain.model.Notes
 import kotlinx.serialization.Serializable
 
 sealed interface Route {
@@ -17,5 +16,5 @@ sealed interface Route {
     data object ListNotesRoute : Route
 
     @Serializable
-    data class AddEditRoute(val note: Notes) : Route
+    data class AddEditRoute(val noteId: Int?) : Route
 }

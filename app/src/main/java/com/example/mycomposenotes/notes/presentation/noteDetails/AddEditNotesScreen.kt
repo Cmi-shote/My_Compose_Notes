@@ -6,11 +6,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.mycomposenotes.notes.domain.model.Notes
 
 @Composable
 fun AddEditNotesScreen(
-    note: Notes,
+    noteId: Int?,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {}
 ) {
@@ -23,7 +22,7 @@ fun AddEditNotesScreen(
                 top = statusBarPadding.calculateTopPadding(),
                 bottom = statusBarPadding.calculateBottomPadding()
             ),
-        note = note,
+        noteId = noteId,
         onBackPressed = onBackPressed,
     )
 
