@@ -1,11 +1,16 @@
 package com.example.mycomposenotes.notes.presentation.noteDetails
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -14,7 +19,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mycomposenotes.notes.domain.model.Notes
 import com.example.mycomposenotes.notes.presentation.utils.toFormattedDate
 import kotlinx.coroutines.launch
@@ -33,6 +41,7 @@ fun NoteContent(
     val selectedImageUris by viewModel.selectedImageUris
     val note by viewModel.currentNote
     val noteBackground = if (note.backGroundImageId == -1) Notes.noteBackgroundImages[viewModel.noteBackground.value] else Notes.noteBackgroundImages[note.backGroundImageId]
+    val dateTime = if (note.timeStamp == 0L) System.currentTimeMillis() else note.timeStamp
     val title by viewModel.noteTitle
     val content by viewModel.noteContent
     val snackBarMessage by viewModel.snackBarMessage
@@ -100,7 +109,7 @@ fun NoteContent(
                 content = content,
                 onContentChange = { viewModel.onEvent(AddEditNoteEvent.EnteredContent(it)) },
                 selectedImageUris = selectedImageUris,
-                dateTime = note.timeStamp.toFormattedDate()
+                dateTime = dateTime.toFormattedDate()
             )
         }
     }
