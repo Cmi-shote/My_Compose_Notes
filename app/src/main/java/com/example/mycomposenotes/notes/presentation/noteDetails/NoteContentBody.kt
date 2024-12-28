@@ -1,6 +1,7 @@
 package com.example.mycomposenotes.notes.presentation.noteDetails
 
 import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,11 +30,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.example.mycomposenotes.R
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -106,12 +109,23 @@ fun NoteContentBody(
             modifier = Modifier.fillMaxWidth()
         ) {
             selectedImageUris.forEach { selectedImageUri ->
-                AsyncImage(
+                val painter = rememberAsyncImagePainter(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(selectedImageUri)
+                        .apply {
+                            crossfade(true)
+                            error(R.drawable.error_image)
+                            placeholder(R.drawable.place_holder_image)
+                        }
+                        .build()
+                )
+
+                Image(
                     modifier = Modifier
                         .size(150.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .background(Color.LightGray),
-                    model = selectedImageUri,
+                    painter = painter,
                     contentDescription = null,
                     contentScale = ContentScale.Crop
                 )

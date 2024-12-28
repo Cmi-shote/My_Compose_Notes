@@ -11,6 +11,7 @@ import com.example.mycomposenotes.notes.domain.useCase.LoginUseCase
 import com.example.mycomposenotes.notes.domain.useCase.NotesUseCases
 import com.example.mycomposenotes.notes.domain.useCase.SignOutUseCase
 import com.example.mycomposenotes.notes.domain.useCase.SignupUseCase
+import com.example.mycomposenotes.notes.domain.useCase.UploadImagesToFirebaseUseCase
 import com.example.mycomposenotes.notes.domain.useCase.UploadNoteToFirebaseUseCase
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.dsl.module
@@ -20,7 +21,7 @@ val useCaseModule = module {
     factory { DeleteNotesUseCase(get()) }
     factory { GetNotesUseCase(get()) }
     factory { GetNoteUseCase(get()) }
-    factory { NotesUseCases(get(), get(), get(), get(), get(), get(), get()) }
+    factory { NotesUseCases(get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { LoginUseCase(get()) }
     factory { SignOutUseCase(get()) }
     factory { SignupUseCase(get()) }
@@ -28,4 +29,5 @@ val useCaseModule = module {
     factory { GetNotesFromFirebaseUseCase(get()) }
     factory { UploadNoteToFirebaseUseCase(get()) }
     factory { DeleteNoteFromFirebase(get()) }
+    factory { UploadImagesToFirebaseUseCase(get()) }
 }

@@ -1,18 +1,22 @@
 package com.example.mycomposenotes.notes.data.repository
 
+import android.net.Uri
 import android.util.Log
 import com.example.mycomposenotes.notes.data.dataSource.NotesDao
 import com.example.mycomposenotes.notes.domain.model.Notes
 import com.example.mycomposenotes.notes.domain.repository.NotesRepo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 
 class NotesRepoImpl(
     private val notesDao: NotesDao,
     private val firebaseFirestore: FirebaseFirestore,
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val firebaseStorage: FirebaseStorage
 ) : NotesRepo {
     override fun getNotes(): Flow<List<Notes>> {
         return notesDao.getNotes()
@@ -98,4 +102,23 @@ class NotesRepoImpl(
         }
     }
 
+    override suspend fun uploadImagesToFirebase(uris: List<Uri>): List<Uri> {
+        val downloadUrls = mutableListOf<Uri>()
+        for (uri in uris) {
+            val fileName = UUID.randomUUID().toString()
+            val storageRef = firebaseStorage.reference.child("notes_images/$fileName.jpg")
+
+            try {
+                val uploadTask = storageRef.putFile(uri)
+                uploadTask.await() // Await the upload completion
+                val downloadUrl = storageRef.downloadUrl.await() // Get the download URL
+                downloadUrls.add(downloadUrl)
+            } catch (e: Exception) {
+                Log.e("NotesRepoImpl", "Error uploading image: ${e.message}")
+            }
+        }
+        Log.e("simi", "url: ${downloadUrls}")
+        Log.e("simi", downloadUrls.toString())
+        return downloadUrls
+    }
 }

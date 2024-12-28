@@ -1,5 +1,6 @@
 package com.example.mycomposenotes.notes.domain.repository
 
+import android.net.Uri
 import com.example.mycomposenotes.notes.domain.model.Notes
 import kotlinx.coroutines.flow.Flow
 
@@ -22,4 +23,6 @@ interface NotesRepo {
     suspend fun getNoteByTimeStamp(timeStamp: Long): Notes
 
     suspend fun deleteNoteFromFirebase(noteId: Int)
+
+    suspend fun uploadImagesToFirebase(uris: List<Uri>): List<Uri>
 }

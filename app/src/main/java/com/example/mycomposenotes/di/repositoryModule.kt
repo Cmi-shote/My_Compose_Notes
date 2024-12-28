@@ -5,5 +5,5 @@ import com.example.mycomposenotes.notes.data.repository.NotesRepoImpl
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<NotesRepo> { NotesRepoImpl(get(), get(), get()) }
+    single<NotesRepo> { NotesRepoImpl(get(), get(), get(), get()) }
 }
