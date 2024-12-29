@@ -54,7 +54,7 @@ fun SearchAppBar(
                     modifier = Modifier
                         .alpha(0.5f),
                     text = "Search here...",
-                    color = Color.White
+//                    color = Color.White
                 )
             },
             textStyle = TextStyle(
@@ -70,7 +70,7 @@ fun SearchAppBar(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search Icon",
-                        tint = Color.Black
+//                        tint = Color.Black
                     )
                 }
             },
@@ -87,7 +87,7 @@ fun SearchAppBar(
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close Icon",
-                        tint = Color.Black
+//                        tint = Color.Black
                     )
                 }
             },
@@ -99,13 +99,13 @@ fun SearchAppBar(
                     onSearchClicked(text)
                 }
             ),
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color.Transparent,
-                focusedContainerColor = Color.Transparent,
-                focusedIndicatorColor = Color.LightGray,
-                unfocusedIndicatorColor = colorResource(R.color.lighter_gray),
-                cursorColor = Color.White.copy(alpha = 0.5f)
-            )
+//            colors = TextFieldDefaults.colors(
+//                unfocusedContainerColor = Color.Transparent,
+//                focusedContainerColor = Color.Transparent,
+//                focusedIndicatorColor = Color.LightGray,
+//                unfocusedIndicatorColor = colorResource(R.color.lighter_gray),
+//                cursorColor = Color.White.copy(alpha = 0.5f)
+//            )
         )
     }
 }

@@ -69,7 +69,7 @@ fun LoginContent(
     ) {
         Card(
             shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, Color.Black),
+//            border = BorderStroke(1.dp, Color.Black),
             modifier = Modifier
                 .wrapContentSize(),
             colors = CardDefaults.cardColors(Color.Transparent)
@@ -110,9 +110,9 @@ fun LoginContent(
                 Button(
                     onClick = onLoginClick,
                     shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black
-                    ),
+//                    colors = ButtonDefaults.buttonColors(
+//                        containerColor = Color.Black
+//                    ),
                     enabled = authenticationState !is AuthenticationState.Loading
                 ) {
                     Text(
@@ -127,7 +127,7 @@ fun LoginContent(
                 TextButton(onClick = { onClick() }) {
                     Text(
                         text = buttonText,
-                        color = Color.Gray
+//                        color = Color.Gray
                     )
                 }
             }

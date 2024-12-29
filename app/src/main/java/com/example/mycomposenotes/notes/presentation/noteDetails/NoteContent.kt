@@ -47,6 +47,7 @@ fun NoteContent(
     val snackBarMessage by viewModel.snackBarMessage
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     val multiplePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 2),
@@ -87,6 +88,7 @@ fun NoteContent(
                         try {
                             if (selectedImageUris.isNotEmpty()) {
                                 viewModel.onEvent(AddEditNoteEvent.UploadMedia(selectedImageUris) {
+                                    Log.d("NoteContent", "isLoading: $isLoading")
                                     val mediaId = viewModel.mediaId.value
                                     viewModel.onEvent(AddEditNoteEvent.UpdateMediaId(mediaId))
 
@@ -111,6 +113,19 @@ fun NoteContent(
                 selectedImageUris = selectedImageUris,
                 dateTime = dateTime.toFormattedDate()
             )
+
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color(0x80000000)) // Semi-transparent background
+                        .wrapContentSize(Alignment.Center) // Ensures spinner is centered
+                ) {
+                    CircularProgressIndicator(
+//                        color = Color.Black
+                    )
+                }
+            }
         }
     }
 }

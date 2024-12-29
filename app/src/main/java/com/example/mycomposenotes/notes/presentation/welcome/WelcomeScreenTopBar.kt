@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -44,16 +45,17 @@ fun WelcomeScreenTopBar(
         modifier = modifier.fillMaxWidth()
             .padding(horizontal = 16.dp)
             .padding(bottom = 16.dp)
+            .statusBarsPadding()
     ) {
         Row {
             Box(modifier = Modifier
-                .background(Color.Black)
+//                .background(Color.Black)
                 .size(20.dp)) {
                 Text(
                     text = "N",
                     fontSize = 10.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    color = Color.White,
+//                    color = Color.White,
                     modifier = Modifier
                         .align(alignment = Alignment.BottomStart)
                         .padding(start = 3.dp)
@@ -76,9 +78,9 @@ fun WelcomeScreenTopBar(
                 Button(
                     onClick = onSignOut,
                     shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black
-                    ),
+//                    colors = ButtonDefaults.buttonColors(
+//                        containerColor = Color.Black
+//                    ),
                     contentPadding = PaddingValues(horizontal = 15.dp),
                     modifier = Modifier.padding(end = 8.dp).height(30.dp)
                 ) {

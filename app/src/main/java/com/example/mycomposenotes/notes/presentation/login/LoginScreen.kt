@@ -25,8 +25,7 @@ fun LoginScreen(
             WelcomeScreenTopBar()
         },
         modifier = modifier
-            .fillMaxSize()
-            .statusBarsPadding(),
+            .fillMaxSize(),
         content = { paddingValues ->
             LoginContent(
                 modifier = Modifier.padding(paddingValues),

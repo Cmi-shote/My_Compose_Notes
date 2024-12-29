@@ -68,14 +68,11 @@ fun ListNotesScreen(
             )
         },
         modifier = modifier
-            .fillMaxSize()
-            .statusBarsPadding(),
+            .fillMaxSize(),
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 onclick()
-            }, containerColor = Color.Black, contentColor = Color.White) {
-                Icon(Icons.Filled.Add, contentDescription = "Add")
-            }
+            }) { Icon(Icons.Filled.Add, contentDescription = "Add") }
         },
         floatingActionButtonPosition = FabPosition.End,
         content = { paddingValues ->
@@ -83,8 +80,7 @@ fun ListNotesScreen(
                 // Show CircularProgressIndicator while loading
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
+                        .fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(

@@ -22,10 +22,10 @@ fun WelcomeScreen(
             WelcomeScreenTopBar()
         },
         modifier = modifier
-            .fillMaxSize()
-            .statusBarsPadding(),
+            .fillMaxSize(),
         content = { paddingValues ->
-            WelcomeScreenContent(modifier = Modifier
+            WelcomeScreenContent(
+                modifier = Modifier
                 .padding(
                     start = paddingValues.calculateLeftPadding(LayoutDirection.Ltr) + 16.dp,
                     top = paddingValues.calculateTopPadding(),

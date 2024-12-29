@@ -65,9 +65,9 @@ fun NoteDetailsTopBar(
 
             Button(
                 modifier = Modifier.padding(end = 10.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Black
-                ),
+//                colors = ButtonDefaults.buttonColors(
+//                    containerColor = Color.Black
+//                ),
                 onClick = onDoneBtnClick
             ) {
                 Text(buttonText)
@@ -138,14 +138,17 @@ fun CircularIconButton(
     Box(
         modifier = Modifier
             .size(36.dp)
-            .background(Color.Black, shape = CircleShape), // Slight transparency
+            .background(
+                Color.Black,
+                shape = CircleShape
+            ), // Slight transparency
         contentAlignment = Alignment.Center
     ) {
         IconButton(onClick = onClick) {
             Icon(
                 imageVector = icon,
                 contentDescription = contentDescription,
-                tint = Color.White
+//                tint = Color.White
             )
         }
     }

@@ -1,6 +1,7 @@
 package com.example.mycomposenotes.notes.presentation.noteDetails
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -11,6 +12,8 @@ import com.example.mycomposenotes.notes.domain.model.Notes
 import com.example.mycomposenotes.notes.domain.useCase.NotesUseCases
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class AddEditViewModel(
@@ -43,6 +46,9 @@ class AddEditViewModel(
 
     private val _mediaId = mutableStateOf("")
     val mediaId: State<String> = _mediaId
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     fun onEvent(event: AddEditNoteEvent) {
         when (event) {
@@ -97,11 +103,22 @@ class AddEditViewModel(
             }
             is AddEditNoteEvent.UploadMedia -> {
                 viewModelScope.launch {
-                    val uris = notesUseCases.uploadImagesToFirebaseUseCase(event.uris)
-                    _mediaId.value = uris.joinToString(",")
-                    event.onSuccess()
+                    Log.d("AddEditViewModel", "Uploading media...")
+                    _isLoading.value = true
+
+                    try {
+                        val uris = notesUseCases.uploadImagesToFirebaseUseCase(event.uris)
+                        _mediaId.value = uris.joinToString(",")
+                        event.onSuccess()
+                    } catch (e: Exception) {
+                        Log.e("AddEditViewModel", "Error uploading media", e)
+                        _snackBarMessage.value = "Failed to upload media: ${e.message}"
+                    } finally {
+                        _isLoading.value = false
+                    }
                 }
             }
+
         }
     }
 

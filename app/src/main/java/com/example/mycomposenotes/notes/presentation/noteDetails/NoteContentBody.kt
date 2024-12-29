@@ -59,13 +59,13 @@ fun NoteContentBody(
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.schedule_icon),
                 contentDescription = "Clock Icon",
-                tint = Color.Gray
+//                tint = Color.Gray
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = dateTime,
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray
+//                color = Color.Gray
             )
         }
 
@@ -77,8 +77,8 @@ fun NoteContentBody(
             label = { Text("Title") },
             textStyle = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
             colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = colorResource(R.color.white),
-                focusedContainerColor = colorResource(R.color.white),
+//                unfocusedContainerColor = colorResource(R.color.white),
+//                focusedContainerColor = colorResource(R.color.white),
                 focusedIndicatorColor = Color.Gray,
                 unfocusedIndicatorColor = Color.LightGray
             ),
@@ -93,8 +93,8 @@ fun NoteContentBody(
             label = { Text("Content") },
             textStyle = MaterialTheme.typography.bodyMedium,
             colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = colorResource(R.color.white),
-                focusedContainerColor = colorResource(R.color.white),
+//                unfocusedContainerColor = colorResource(R.color.white),
+//                focusedContainerColor = colorResource(R.color.white),
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
@@ -123,8 +123,8 @@ fun NoteContentBody(
                 Image(
                     modifier = Modifier
                         .size(150.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(Color.LightGray),
+                        .clip(RoundedCornerShape(8.dp)),
+//                        .background(Color.LightGray),
                     painter = painter,
                     contentDescription = null,
                     contentScale = ContentScale.Crop

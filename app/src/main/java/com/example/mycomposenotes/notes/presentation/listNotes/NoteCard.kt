@@ -43,9 +43,9 @@ fun NoteCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.off_white)
-        ),
+//        colors = CardDefaults.cardColors(
+//            containerColor = colorResource(R.color.off_white)
+//        ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
         ),

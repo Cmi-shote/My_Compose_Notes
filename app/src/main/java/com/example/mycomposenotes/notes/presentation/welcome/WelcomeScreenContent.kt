@@ -47,9 +47,9 @@ fun WelcomeScreenContent(modifier: Modifier = Modifier, onClick: () -> Unit = {}
         Button(
             onClick = onClick,
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Black
-            )
+//            colors = ButtonDefaults.buttonColors(
+//                containerColor = Color.Black
+//            )
         ) {
             Text(
                 text = stringResource(R.string.sign_up),
