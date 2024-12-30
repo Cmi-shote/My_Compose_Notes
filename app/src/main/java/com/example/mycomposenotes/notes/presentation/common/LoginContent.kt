@@ -127,7 +127,7 @@ fun LoginContent(
                 TextButton(onClick = { onClick() }) {
                     Text(
                         text = buttonText,
-//                        color = Color.Gray
+                        color = Color.Gray
                     )
                 }
             }
