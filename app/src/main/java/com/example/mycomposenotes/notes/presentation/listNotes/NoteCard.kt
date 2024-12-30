@@ -7,16 +7,22 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -38,37 +44,31 @@ fun NoteCard(
     note: Notes,
     onClick: () -> Unit = {}
 ) {
-    Log.d("NoteCard", "NoteCard called with note: ${Notes.noteBackgroundImages[note.backGroundImageId]}")
     Card(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() },
-//        colors = CardDefaults.cardColors(
-//            containerColor = colorResource(R.color.off_white)
-//        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
-        ),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        Box(modifier = Modifier.padding(16.dp)) {
-            Image(
-                painter = painterResource(Notes.noteBackgroundImages[note.backGroundImageId]!!),
-                contentDescription = "random",
-                modifier = Modifier.matchParentSize(),
-                contentScale = ContentScale.FillBounds,
-                alpha = 0.1f,
-            )
-            Column {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            // Column takes 75% of the width
+            Column(
+                modifier = Modifier
+                    .weight(0.75f)
+                    .padding(16.dp)
+            ) {
                 Text(
                     text = note.title,
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.SemiBold
                 )
 
+                Spacer(modifier = Modifier.height(8.dp))
+
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(32.dp)
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.schedule_icon),
@@ -84,32 +84,39 @@ fun NoteCard(
                     Text(
                         text = note.category,
                         fontSize = 10.sp,
-                        color = colorResource(R.color.fog_gray)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
+
+            Image(
+                painter = painterResource(Notes.noteBackgroundImages[note.backGroundImageId]!!),
+                contentDescription = "Note background",
+                modifier = Modifier
+                    .weight(0.25f)
+                    .height(50.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                contentScale = ContentScale.Crop,
+                alpha = 0.1f
+            )
         }
     }
 }
 
-@Preview(
-    showBackground = true,
-    showSystemUi = true
-)
+
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun NoteCardPreview() {
     MyComposeNotesTheme {
         val noteSample = Notes(
-            id = 1344324,
-            title = "A Right Media Mix Can Make The Difference",
-            content = stringResource(R.string.lorem_ipsum),
+            id = 1,
+            title = "Sample Note Title",
+            content = "Sample content",
             timeStamp = System.currentTimeMillis(),
             category = "Work",
             mediaId = "1",
-            backGroundImageId = R.drawable.note_background_1
+            backGroundImageId = R.drawable.note_background_1 // Use a placeholder
         )
-        NoteCard(
-            note = noteSample
-        )
+        NoteCard(note = noteSample)
     }
 }

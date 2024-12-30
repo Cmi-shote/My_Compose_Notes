@@ -18,6 +18,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -139,7 +140,7 @@ fun CircularIconButton(
         modifier = Modifier
             .size(36.dp)
             .background(
-                Color.Black,
+                color = MaterialTheme.colorScheme.surface,
                 shape = CircleShape
             ), // Slight transparency
         contentAlignment = Alignment.Center
@@ -147,8 +148,7 @@ fun CircularIconButton(
         IconButton(onClick = onClick) {
             Icon(
                 imageVector = icon,
-                contentDescription = contentDescription,
-//                tint = Color.White
+                contentDescription = contentDescription
             )
         }
     }
