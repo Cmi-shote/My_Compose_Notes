@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    //firebase
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
@@ -90,4 +91,9 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     //coil
     implementation(libs.coil)
+    //authentication with credential manager
+    implementation(libs.google.android.gms)
+    implementation(libs.google.android.libraries)
+    implementation(libs.google.cred)
+    implementation(libs.google.cred.auth)
 }

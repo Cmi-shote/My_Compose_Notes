@@ -16,6 +16,7 @@ googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.1.0"
 firebaseFirestore = "25.1.1"
 firebaseStorage = "20.3.0"
+googleCred = "1.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,6 +47,10 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 coil = { module = "io.coil-kt:coil-compose", version = "2.3.0" }
+google-android-gms = { module = "com.google.android.gms:play-services-auth", version = "21.3.0" }
+google-cred = { module = "androidx.credentials:credentials", version.ref = "googleCred" }
+google-cred-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "googleCred" }
+google-android-libraries = { module = "com.google.android.libraries.identity.googleid:googleid", version = "1.1.1" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
