@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AddEditViewModel(
@@ -21,7 +22,7 @@ class AddEditViewModel(
     private val firebaseAuth: FirebaseAuth
 ) : ViewModel() {
 
-    private val _currentNote = mutableStateOf<Notes>(Notes())
+    private val _currentNote = mutableStateOf(Notes())
     val currentNote: State<Notes> = _currentNote
 
     private val _currentNoteId = mutableStateOf<Int?>(null)
@@ -48,7 +49,7 @@ class AddEditViewModel(
     val mediaId: State<String> = _mediaId
 
     private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     fun onEvent(event: AddEditNoteEvent) {
         when (event) {
