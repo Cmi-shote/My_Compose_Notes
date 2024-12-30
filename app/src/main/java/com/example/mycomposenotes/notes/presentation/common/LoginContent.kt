@@ -1,7 +1,8 @@
 package com.example.mycomposenotes.notes.presentation.common
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedTextField
@@ -21,15 +21,17 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mycomposenotes.notes.presentation.login.AuthenticationEvent
 import com.example.mycomposenotes.notes.presentation.login.AuthViewModel
+import com.example.mycomposenotes.notes.presentation.login.AuthenticationEvent
 import com.example.mycomposenotes.notes.presentation.login.AuthenticationState
+import com.example.mycomposenotes.notes.presentation.utils.GoogleSignInUtils
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -47,6 +49,19 @@ fun LoginContent(
     val password = viewModel.password
     val authenticationState by viewModel.authenticationState
     val context = LocalContext.current
+
+    val scope = rememberCoroutineScope()
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
+        GoogleSignInUtils.doGoogleSignIn(
+            context = context,
+            scope = scope,
+            launcher = null,
+            login = {
+                Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+    }
 
     LaunchedEffect(authenticationState) {
         when (authenticationState) {
@@ -117,6 +132,29 @@ fun LoginContent(
                 ) {
                     Text(
                         text = titleText,
+                        fontSize = 15.sp,
+                        modifier = Modifier.padding(10.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = {
+                        GoogleSignInUtils.doGoogleSignIn(
+                            context = context,
+                            scope = scope,
+                            launcher = launcher,
+                            login = {
+                                Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
+                                onSuccess()
+                            })
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    enabled = authenticationState !is AuthenticationState.Loading
+                ) {
+                    Text(
+                        text = titleText + " with Google",
                         fontSize = 15.sp,
                         modifier = Modifier.padding(10.dp)
                     )
