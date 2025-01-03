@@ -12,4 +12,4 @@ fun provideDataBase(application: Application) : NotesDatabase =
         NOTE_DATABASE_NAME
     ).build()
 
-fun provideDao(notesDataBase: NotesDatabase): NotesDao = notesDataBase.NotesDao()
+fun provideDao(notesDataBase: NotesDatabase): NotesDao = notesDataBase.notesDao()

@@ -11,5 +11,5 @@ import com.example.mycomposenotes.notes.data.dataSource.NotesDao
     exportSchema = false
 )
 abstract class NotesDatabase: RoomDatabase() {
-    abstract fun NotesDao(): NotesDao
+    abstract fun notesDao(): NotesDao
 }

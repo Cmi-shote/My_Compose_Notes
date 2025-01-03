@@ -96,4 +96,14 @@ dependencies {
     implementation(libs.google.android.libraries)
     implementation(libs.google.cred)
     implementation(libs.google.cred.auth)
+
+    // Google Truth
+    testImplementation(libs.google.truth.library)
+    androidTestImplementation(libs.google.truth.library)
+
+    // Mockito
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    androidTestImplementation(libs.mockito.android)
+    testImplementation(libs.coroutines.test)
 }
