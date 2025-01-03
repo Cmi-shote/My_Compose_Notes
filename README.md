@@ -56,12 +56,12 @@ Notey is a modern, feature-rich note-taking app built using Jetpack Compose, adh
 
 ### Steps:
 
-    - Clone the repository:
+- Clone the repository:
 
-    - git clone [Link](https://github.com/Cmi-shote/My_Compose_Notes)
+- git clone [Link](https://github.com/Cmi-shote/My_Compose_Notes)
 
-    - Open the project in Android Studio.
+- Open the project in Android Studio.
 
-    - Add your Firebase configuration file (google-services.json) to the app directory.
+- Add your Firebase configuration file (google-services.json) to the app directory.
 
-    - Build and run the project.
+- Build and run the project.
