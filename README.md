@@ -38,3 +38,30 @@ Notey is a modern, feature-rich note-taking app built using Jetpack Compose, adh
     - Manages data from Room, Firebase Firestore, and Firebase Storage.
 
     - Implements repository pattern for data access.
+
+
+## Installation
+
+### Prerequisites
+
+**Firebase project set up with:**
+
+    - Authentication (Google Sign-In enabled).
+
+    - Firestore database.
+
+    - Firebase Storage.
+
+    - Android device or emulator (API level 21+).
+
+### Steps:
+
+    - Clone the repository:
+
+    - git clone [Link](https://github.com/Cmi-shote/My_Compose_Notes)
+
+    - Open the project in Android Studio.
+
+    - Add your Firebase configuration file (google-services.json) to the app directory.
+
+    - Build and run the project.
