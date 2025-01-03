@@ -1,6 +1,7 @@
 package com.example.mycomposenotes.notes.presentation.noteDetails
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -41,21 +42,27 @@ fun NoteContent(
     viewModel: AddEditViewModel = koinViewModel(),
     onBackPressed: () -> Unit = {},
 ) {
-    viewModel.getNote(noteId)
+    LaunchedEffect(noteId) {
+        viewModel.getNote(noteId)
+    }
 
     val selectedImageUris by viewModel.selectedImageUris
     val note by viewModel.currentNote
-    val noteBackground = if (note.backGroundImageId == -1)
-        Notes.noteBackgroundImages[viewModel.noteBackground.value]
-    else
-        Notes.noteBackgroundImages[note.backGroundImageId]
-    val dateTime = if (note.timeStamp == 0L) System.currentTimeMillis() else note.timeStamp
     val title by viewModel.noteTitle
     val content by viewModel.noteContent
     val snackBarMessage by viewModel.snackBarMessage
     val scope = rememberCoroutineScope()
-    val snackBarHostState = remember { SnackbarHostState() }
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+
+    val noteBackground = remember(note.id, note.backGroundImageId) {
+        when {
+            note.id == null -> Notes.noteBackgroundImages[viewModel.noteBackground.value]
+            note.backGroundImageId == -1 -> Notes.noteBackgroundImages[viewModel.noteBackground.value]
+            else -> Notes.noteBackgroundImages[note.backGroundImageId]
+        }
+    }
+
+    val dateTime = if (note.timeStamp == 0L) System.currentTimeMillis() else note.timeStamp
 
     val multiplePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 2),
@@ -64,7 +71,7 @@ fun NoteContent(
         }
     )
 
-    LaunchedEffect(note) {
+    LaunchedEffect(note.id) {
         if (note.id != null) {
             viewModel.onEvent(AddEditNoteEvent.CurrentNoteId(note.id!!))
             viewModel.onEvent(AddEditNoteEvent.EnteredTitle(note.title))
@@ -77,51 +84,49 @@ fun NoteContent(
     }
 
     Box(modifier = modifier.fillMaxSize()) {
-        Scaffold(
-            snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
-        ) { paddingValues ->
+        Scaffold { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = paddingValues.calculateTopPadding())
             ) {
-                NoteContentTopBar(
-                    noteBackground = noteBackground ?: 0,
-                    onBackPressed = onBackPressed,
-                    onDeleteClicked = {
-                        viewModel.onEvent(
-                            AddEditNoteEvent.DeleteNote(note, onDelete = { onBackPressed() })
-                        )
-                    },
-                    onClipClicked = {
-                        multiplePhotoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
-                    },
-                    onDoneBtnClick = {
-                        scope.launch {
-                            try {
-                                if (selectedImageUris.isNotEmpty()) {
-                                    viewModel.onEvent(AddEditNoteEvent.UploadMedia(selectedImageUris) {
-                                        val mediaId = viewModel.mediaId.value
-                                        viewModel.onEvent(AddEditNoteEvent.UpdateMediaId(mediaId))
+                noteBackground?.let { background ->
+                    NoteContentTopBar(
+                        noteBackground = background,
+                        onBackPressed = onBackPressed,
+                        onDeleteClicked = {
+                            viewModel.onEvent(
+                                AddEditNoteEvent.DeleteNote(note, onDelete = { onBackPressed() })
+                            )
+                        },
+                        onClipClicked = {
+                            multiplePhotoPickerLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        },
+                        onDoneBtnClick = {
+                            scope.launch {
+                                try {
+                                    if (selectedImageUris.isNotEmpty()) {
+                                        viewModel.onEvent(AddEditNoteEvent.UploadMedia(selectedImageUris) {
+                                            val mediaId = viewModel.mediaId.value
+                                            viewModel.onEvent(AddEditNoteEvent.UpdateMediaId(mediaId))
+                                            viewModel.onEvent(
+                                                AddEditNoteEvent.SaveNote(onSuccess = { onBackPressed() })
+                                            )
+                                        })
+                                    } else {
                                         viewModel.onEvent(
                                             AddEditNoteEvent.SaveNote(onSuccess = { onBackPressed() })
                                         )
-                                    })
-                                } else {
-                                    viewModel.onEvent(
-                                        AddEditNoteEvent.SaveNote(onSuccess = { onBackPressed() })
-                                    )
+                                    }
+                                } catch (e: Exception) {
+                                    Log.e("NoteContent", "Error saving note", e)
                                 }
-                            } catch (e: Exception) {
-                                snackBarHostState.showSnackbar(
-                                    message = "Error saving note: ${e.message}"
-                                )
                             }
                         }
-                    }
-                )
+                    )
+                }
 
                 NoteContentBody(
                     title = title,
