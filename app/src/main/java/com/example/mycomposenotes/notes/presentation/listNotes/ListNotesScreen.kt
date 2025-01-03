@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -121,26 +120,3 @@ fun ListNotesScreen(
         }
     )
 }
-
-//@Preview(
-//    showBackground = true,
-//    showSystemUi = true
-//)
-//@Composable
-//fun ListNotesScreenPreview() {
-//    MyComposeNotesTheme {
-//        ListNotesScreen(
-//            notes = (1..100).map {
-//                (Notes(
-//                    id = 123421,
-//                    title = "A Right Media Mix Can Make The Difference",
-//                    content = stringResource(R.string.lorem_ipsum),
-//                    timeStamp = System.currentTimeMillis(),
-//                    category = "Work",
-//                    mediaId = "1",
-//                    backGroundImageId = R.drawable.note_background_1
-//                )).copy(id = it)
-//            }
-//        )
-//    }
-//}
