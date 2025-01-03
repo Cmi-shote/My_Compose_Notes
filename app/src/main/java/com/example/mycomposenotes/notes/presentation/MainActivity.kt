@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.Surface
 import androidx.navigation.compose.rememberNavController
 import com.example.mycomposenotes.notes.presentation.navigation.NotesNavHost
 import com.example.mycomposenotes.notes.presentation.navigation.Route
@@ -20,19 +21,21 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyComposeNotesTheme {
-                val navController = rememberNavController()
+                Surface {
+                    val navController = rememberNavController()
 
-                // Determine start destination based on authentication state
-                val startDestination = if (firebaseAuth.currentUser != null) {
-                    Route.ListNotesRoute // Navigate to notes list if authenticated
-                } else {
-                    Route.WelcomeRoute// Otherwise, navigate to welcome screen
+                    // Determine start destination based on authentication state
+                    val startDestination = if (firebaseAuth.currentUser != null) {
+                        Route.ListNotesRoute // Navigate to notes list if authenticated
+                    } else {
+                        Route.WelcomeRoute// Otherwise, navigate to welcome screen
+                    }
+
+                    NotesNavHost(
+                        navController = navController,
+                        startDestination = startDestination,
+                    )
                 }
-
-                NotesNavHost(
-                    navController = navController,
-                    startDestination = startDestination,
-                )
             }
         }
     }
