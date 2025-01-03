@@ -124,10 +124,10 @@ class AddEditViewModel(
     }
 
     fun getNote(id: Int?) {
-        viewModelScope.launch(Dispatchers.IO) { // Move this to background thread
+        viewModelScope.launch(Dispatchers.IO) {
             if (id != null) {
-                val note = notesUseCases.getNoteUseCase(id) // Database operation
-                _currentNote.value = note ?: Notes() // Update the state on the main thread
+                val note = notesUseCases.getNoteUseCase(id)
+                _currentNote.value = note ?: Notes()
             }
         }
     }
