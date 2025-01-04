@@ -90,7 +90,6 @@ class ListNotesViewModel(
             try {
                 useCases.getNotesFromFirebaseUseCase()
                 getNotes()
-                Log.d("ListNotesViewModel", "Notes synced from Firebase ${notesList.value}")
             } catch (e: Exception) {
                 Log.e("ListNotesViewModel", "Error syncing notes from Firebase", e)
             } finally {

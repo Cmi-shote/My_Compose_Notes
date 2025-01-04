@@ -4,7 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -16,10 +18,11 @@ fun NoteContentTopBar(
     onBackPressed: () -> Unit,
     onDeleteClicked: () -> Unit,
     onClipClicked: () -> Unit,
-    onDoneBtnClick: () -> Unit
+    onDoneBtnClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(150.dp)
     ) {
@@ -35,7 +38,8 @@ fun NoteContentTopBar(
             onBackPressed = onBackPressed,
             onDeleteClicked = onDeleteClicked,
             onClipClicked = onClipClicked,
-            onDoneBtnClick = onDoneBtnClick
+            onDoneBtnClick = onDoneBtnClick,
+            modifier = Modifier.padding(top = 8.dp)
         )
     }
 }

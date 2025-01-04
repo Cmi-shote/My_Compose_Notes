@@ -88,7 +88,6 @@ fun NotesNavHost(navController: NavHostController, startDestination: Route) {
 //            )
          {
             val arguments = it.toRoute<Route.AddEditRoute>()
-            Log.d("AddEditRoute", "Note: $arguments")
             AddEditNotesScreen(
                 noteId = arguments.noteId,
                 onBackPressed = {

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -84,12 +85,8 @@ fun NoteContent(
     }
 
     Box(modifier = modifier.fillMaxSize()) {
-        Scaffold { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = paddingValues.calculateTopPadding())
-            ) {
+        Scaffold(
+            topBar = {
                 noteBackground?.let { background ->
                     NoteContentTopBar(
                         noteBackground = background,
@@ -124,9 +121,17 @@ fun NoteContent(
                                     Log.e("NoteContent", "Error saving note", e)
                                 }
                             }
-                        }
+                        },
+                        modifier = modifier.statusBarsPadding()
                     )
                 }
+            }
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding())
+            ) {
 
                 NoteContentBody(
                     title = title,

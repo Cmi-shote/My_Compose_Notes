@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -33,13 +34,16 @@ import com.example.mycomposenotes.R
 @Composable
 fun SearchAppBar(
     text: String,
+    modifier: Modifier = Modifier,
     onTextChange: (String) -> Unit = {},
     onCloseClicked: () -> Unit = {},
     onSearchClicked: (String) -> Unit = {},
+
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
+            .statusBarsPadding()
             .padding(horizontal = 16.dp)
             .padding(bottom = 16.dp)
     ) {
