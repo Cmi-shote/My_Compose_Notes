@@ -99,7 +99,7 @@ fun WelcomeScreenTopBar(
     showSystemUi = true
 )
 @Composable
-fun ppBarPreview() {
+fun WelcomeScreenTopBarPreview() {
     WelcomeScreenTopBar(
         notes = listOf(Notes())
     )

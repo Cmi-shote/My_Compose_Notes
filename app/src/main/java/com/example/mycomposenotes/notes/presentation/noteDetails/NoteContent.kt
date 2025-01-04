@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -51,7 +49,6 @@ fun NoteContent(
     val note by viewModel.currentNote
     val title by viewModel.noteTitle
     val content by viewModel.noteContent
-    val snackBarMessage by viewModel.snackBarMessage
     val scope = rememberCoroutineScope()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
